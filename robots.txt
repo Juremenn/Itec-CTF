@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /admin/panel.php
+Disallow: /database.sqlite
+Disallow: /config.php
+Disallow: /init.php
+
+# ShopEZ v2.3.1-debug – Contact: dev@shopez.local
