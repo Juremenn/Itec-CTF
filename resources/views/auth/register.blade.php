@@ -9,8 +9,7 @@
         <!-- Logo & Header -->
         <div style="text-align: center; margin-bottom: 1.75rem;">
             <img src="{{ asset('assets/img/logoitec.jpg') }}" alt="Logo ITEC" style="height: 60px; width: auto; border-radius: 10px; margin-bottom: 0.85rem; border: 1px solid var(--border-hairline);">
-            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem; letter-spacing: -0.02em;">Pendaftaran Peserta ITEC CyberLab</h2>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Daftarkan diri Anda untuk mengakses lab dan materi latihan keamanan siber</p>
+            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin: 0; letter-spacing: -0.02em;">ITEC CyberLab</h2>
         </div>
 
         @if($errors->any())

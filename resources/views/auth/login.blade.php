@@ -7,10 +7,9 @@
     <div style="width: 100%; max-width: 420px; background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 12px; padding: 2.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);">
         
         <!-- Logo & Header -->
-        <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="text-align: center; margin-bottom: 1.75rem;">
             <img src="{{ asset('assets/img/logoitec.jpg') }}" alt="Logo ITEC" style="height: 64px; width: auto; border-radius: 10px; margin-bottom: 1rem; border: 1px solid var(--border-hairline);">
-            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem; letter-spacing: -0.02em;">ITEC CyberLab</h2>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Silakan masuk untuk mengakses lab dan materi keamanan siber</p>
+            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin: 0; letter-spacing: -0.02em;">ITEC CyberLab</h2>
         </div>
 
         @if($errors->any())
