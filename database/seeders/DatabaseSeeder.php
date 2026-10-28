@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        // 2. Seed Users
+        // 2. Seed Admin User Only
         $admin = User::updateOrCreate(
             ['username' => 'admin'],
             [
@@ -42,36 +42,6 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@cyberlab.local',
                 'password' => Hash::make('Admin12345!'),
                 'role' => 'admin',
-            ]
-        );
-
-        $alice = User::updateOrCreate(
-            ['username' => 'alice'],
-            [
-                'name' => 'Alice Margatroid',
-                'email' => 'alice@cyberlab.local',
-                'password' => Hash::make('alice123'),
-                'role' => 'participant',
-            ]
-        );
-
-        $bob = User::updateOrCreate(
-            ['username' => 'bob'],
-            [
-                'name' => 'Bob Hacker',
-                'email' => 'bob@cyberlab.local',
-                'password' => Hash::make('bob456'),
-                'role' => 'participant',
-            ]
-        );
-
-        $charlie = User::updateOrCreate(
-            ['username' => 'charlie'],
-            [
-                'name' => 'Charlie Root',
-                'email' => 'charlie@cyberlab.local',
-                'password' => Hash::make('charlie789'),
-                'role' => 'participant',
             ]
         );
 
@@ -228,30 +198,5 @@ class DatabaseSeeder extends Seeder
         foreach ($profiles as $p) {
             DB::table('profiles')->insert(array_merge($p, ['created_at' => now(), 'updated_at' => now()]));
         }
-
-        // 5. Seed some initial sample solves (Alice & Bob)
-        Solve::firstOrCreate([
-            'user_id' => $alice->id,
-            'challenge_id' => $challengeModels['sqli-login-bypass']->id,
-        ], [
-            'mode' => 'competition',
-            'solved_at' => now()->subMinutes(45),
-        ]);
-
-        Solve::firstOrCreate([
-            'user_id' => $alice->id,
-            'challenge_id' => $challengeModels['idor-profile-leak']->id,
-        ], [
-            'mode' => 'training',
-            'solved_at' => now()->subMinutes(20),
-        ]);
-
-        Solve::firstOrCreate([
-            'user_id' => $bob->id,
-            'challenge_id' => $challengeModels['sqli-login-bypass']->id,
-        ], [
-            'mode' => 'competition',
-            'solved_at' => now()->subMinutes(30),
-        ]);
     }
 }

@@ -32,12 +32,22 @@ class ChallengeController extends Controller
         $challenges = $query->orderBy('category')->orderBy('points')->get();
         $userSolves = Solve::where('user_id', $user->id)->pluck('challenge_id')->toArray();
 
+        $isLocked = ($competitionStatus !== 'active');
+        $lockMessage = match ($competitionStatus) {
+            'paused'   => 'Sesi kompetisi sedang dijeda oleh instruktur. Seluruh akses lab, target eksploitasi, dan pengiriman flag dikunci sementara.',
+            'ended'    => 'Sesi kompetisi telah berakhir. Seluruh akses lab, target eksploitasi, dan pengiriman flag telah dinonaktifkan.',
+            'upcoming' => 'Sesi kompetisi belum dimulai. Seluruh tantangan masih terkunci hingga waktu turnamen resmi dimulai.',
+            default    => '',
+        };
+
         return view('challenges.index', compact(
             'challenges',
             'userSolves',
             'activeMode',
             'competitionStatus',
-            'selectedCategory'
+            'selectedCategory',
+            'isLocked',
+            'lockMessage'
         ));
     }
 
@@ -53,20 +63,14 @@ class ChallengeController extends Controller
         $isSolved = $challenge->isSolvedBy($user);
         $solveRecord = $challenge->solveFor($user);
 
-        // Submissions locked state for competition mode
-        $isSubmissionLocked = false;
-        $lockReason = '';
-        if ($activeMode === 'competition' && !$user->isAdmin()) {
-            if ($competitionStatus !== 'active') {
-                $isSubmissionLocked = true;
-                $lockReason = match ($competitionStatus) {
-                    'upcoming' => 'Competition has not started yet. Flag submissions are disabled.',
-                    'paused'   => 'Competition is currently paused by the instructor. Flag submissions are locked.',
-                    'ended'    => 'Competition has concluded. Flag submissions are permanently closed.',
-                    default    => 'Competition mode is inactive. Flag submissions are locked.',
-                };
-            }
-        }
+        // Submissions & interactive labs locked state
+        $isSubmissionLocked = ($competitionStatus !== 'active');
+        $lockReason = match ($competitionStatus) {
+            'upcoming' => 'Kompetisi belum dimulai. Seluruh akses lab dan pengiriman flag dinonaktifkan.',
+            'paused'   => 'Kompetisi sedang dijeda oleh instruktur. Seluruh akses lab dan pengiriman flag dikunci sementara.',
+            'ended'    => 'Kompetisi telah berakhir. Seluruh akses lab dan pengiriman flag ditutup secara permanen.',
+            default    => 'Status kompetisi tidak aktif. Pengiriman flag dikunci.',
+        };
 
         // Leaderboard preview snippet for challenge sidebar
         $topSolvers = Solve::where('challenge_id', $challenge->id)
@@ -104,7 +108,7 @@ class ChallengeController extends Controller
 
         // Check if already solved
         if ($challenge->isSolvedBy($user)) {
-            return back()->with('info', 'You have already captured this flag!');
+            return back()->with('info', 'Anda sudah menyelesaikan tantangan ini sebelumnya!');
         }
 
         if (hash_equals($correctFlag, $submittedFlag)) {
@@ -118,10 +122,10 @@ class ChallengeController extends Controller
                 'solved_at'    => now(),
             ]);
 
-            return back()->with('success', "Correct flag captured! +{$challenge->points} points awarded to your record.");
+            return back()->with('success', "Flag valid berhasil disubmit! Selamat, +{$challenge->points} poin telah ditambahkan ke akun Anda.");
         }
 
-        return back()->with('error', 'Incorrect flag token. Verify your findings and try again.')->withInput();
+        return back()->with('error', 'Flag tidak sesuai. Silakan verifikasi kembali temuan Anda dan coba lagi.')->withInput();
     }
 }
 

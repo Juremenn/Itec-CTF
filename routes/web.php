@@ -22,6 +22,10 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Public Scoreboard & Real-time Live Data (Accessible by Participants and Guests)
+Route::get('/scoreboard', [ScoreboardController::class, 'index'])->name('scoreboard');
+Route::get('/scoreboard/live-data', [ScoreboardController::class, 'liveData'])->name('scoreboard.live_data');
+
 // Authenticated Participant Portal
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
@@ -34,14 +38,14 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('ensure.competition.active')
         ->name('challenges.submit');
 
-    Route::get('/scoreboard', [ScoreboardController::class, 'index'])->name('scoreboard');
-
-    // Interactive Lab Environments for Practice & Exploitation
-    Route::match(['get', 'post'], '/lab/sqli-login', [LabController::class, 'sqliLogin'])->name('lab.sqli_login');
-    Route::get('/lab/sqli-search', [LabController::class, 'sqliSearch'])->name('lab.sqli_search');
-    Route::get('/lab/idor', [LabController::class, 'idor'])->name('lab.idor');
-    Route::get('/lab/xss', [LabController::class, 'xss'])->name('lab.xss');
-    Route::get('/itec/secret-debug-panel', [LabController::class, 'hiddenDebugConsole'])->name('lab.hidden_console');
+    // Interactive Lab Environments Guarded by Competition State Middleware
+    Route::middleware(['ensure.competition.active'])->group(function () {
+        Route::match(['get', 'post'], '/lab/sqli-login', [LabController::class, 'sqliLogin'])->name('lab.sqli_login');
+        Route::get('/lab/sqli-search', [LabController::class, 'sqliSearch'])->name('lab.sqli_search');
+        Route::get('/lab/idor', [LabController::class, 'idor'])->name('lab.idor');
+        Route::get('/lab/xss', [LabController::class, 'xss'])->name('lab.xss');
+        Route::get('/itec/secret-debug-panel', [LabController::class, 'hiddenDebugConsole'])->name('lab.hidden_console');
+    });
 });
 
 // Hidden Admin Panel (/itec/admin)

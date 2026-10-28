@@ -4,7 +4,7 @@
    Color Scheme: Obsidian Pitch Base (#0c0d12) & Warm Amber/Orange Accent (#ea580c / #f97316)
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 /* ── Design Tokens ─────────────────────────────────────────────────────────── */
 :root {
@@ -50,8 +50,8 @@
     --status-paused:       #ef4444;
 
     /* Typography */
-    --font-ui:             'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-mono:           'JetBrains Mono', 'Fira Code', ui-monospace, Menlo, Consolas, monospace;
+    --font-ui:             'Poppins', sans-serif;
+    --font-mono:           'Poppins', sans-serif;
 
     /* Layout & Geometry */
     --navbar-height:       68px;

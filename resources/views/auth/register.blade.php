@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Register Cadet Account')
+@section('title', 'Daftar Akun Peserta')
 
 @section('content')
 <div style="min-height: calc(100vh - 220px); display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;">
@@ -8,9 +8,9 @@
         
         <!-- Logo & Header -->
         <div style="text-align: center; margin-bottom: 1.75rem;">
-            <img src="{{ asset('assets/img/logoitec.jpg') }}" alt="ITEC Logo" style="height: 60px; width: auto; border-radius: 10px; margin-bottom: 0.85rem; border: 1px solid var(--border-hairline);">
-            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem; letter-spacing: -0.02em;">ITEC CyberLab Registration</h2>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Enlist as a new student cadet to access CTF labs and challenges</p>
+            <img src="{{ asset('assets/img/logoitec.jpg') }}" alt="Logo ITEC" style="height: 60px; width: auto; border-radius: 10px; margin-bottom: 0.85rem; border: 1px solid var(--border-hairline);">
+            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem; letter-spacing: -0.02em;">Pendaftaran Peserta ITEC CyberLab</h2>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Daftarkan diri Anda untuk mengakses lab dan materi latihan keamanan siber</p>
         </div>
 
         @if($errors->any())
@@ -29,7 +29,7 @@
 
             <!-- Full Name -->
             <div>
-                <label for="name" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Full Name *</label>
+                <label for="name" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Nama Lengkap *</label>
                 <input 
                     type="text" 
                     id="name" 
@@ -37,7 +37,7 @@
                     value="{{ old('name') }}" 
                     required 
                     autofocus
-                    placeholder="e.g. John Doe"
+                    placeholder="Contoh: Ahmad Fauzi"
                     style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.15s ease;"
                     onfocus="this.style.borderColor='var(--accent-orange)'"
                     onblur="this.style.borderColor='var(--border-input)'"
@@ -46,31 +46,31 @@
 
             <!-- Username -->
             <div>
-                <label for="username" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Cadet Handle / Username *</label>
+                <label for="username" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Username Peserta *</label>
                 <input 
                     type="text" 
                     id="username" 
                     name="username" 
                     value="{{ old('username') }}" 
                     required 
-                    placeholder="e.g. shadow_cadet"
-                    style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-family: monospace; font-size: 0.9rem; outline: none; transition: border-color 0.15s ease;"
+                    placeholder="Contoh: shadow_hunter"
+                    style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.15s ease;"
                     onfocus="this.style.borderColor='var(--accent-orange)'"
                     onblur="this.style.borderColor='var(--border-input)'"
                 >
-                <span style="font-size: 0.7rem; color: var(--text-muted);">Alphanumeric and underscores only (3-30 chars)</span>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">Gunakan kombinasi huruf, angka, dan garis bawah (3-30 karakter)</span>
             </div>
 
             <!-- Email Address -->
             <div>
-                <label for="email" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Email Address *</label>
+                <label for="email" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Alamat Email *</label>
                 <input 
                     type="email" 
                     id="email" 
                     name="email" 
                     value="{{ old('email') }}" 
                     required 
-                    placeholder="cadet@university.edu"
+                    placeholder="peserta@kampus.ac.id"
                     style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.15s ease;"
                     onfocus="this.style.borderColor='var(--accent-orange)'"
                     onblur="this.style.borderColor='var(--border-input)'"
@@ -79,13 +79,13 @@
 
             <!-- Password -->
             <div>
-                <label for="password" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Password *</label>
+                <label for="password" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Kata Sandi *</label>
                 <input 
                     type="password" 
                     id="password" 
                     name="password" 
                     required 
-                    placeholder="Minimum 6 characters"
+                    placeholder="Minimal 6 karakter"
                     style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.15s ease;"
                     onfocus="this.style.borderColor='var(--accent-orange)'"
                     onblur="this.style.borderColor='var(--border-input)'"
@@ -94,13 +94,13 @@
 
             <!-- Confirm Password -->
             <div>
-                <label for="password_confirmation" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Confirm Password *</label>
+                <label for="password_confirmation" style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem;">Konfirmasi Kata Sandi *</label>
                 <input 
                     type="password" 
                     id="password_confirmation" 
                     name="password_confirmation" 
                     required 
-                    placeholder="Re-type your password"
+                    placeholder="Ketik ulang kata sandi Anda"
                     style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.15s ease;"
                     onfocus="this.style.borderColor='var(--accent-orange)'"
                     onblur="this.style.borderColor='var(--border-input)'"
@@ -109,19 +109,18 @@
 
             <!-- Submit Button -->
             <button type="submit" class="btn-orange" style="justify-content: center; width: 100%; padding: 0.75rem; font-size: 0.95rem; margin-top: 0.5rem;">
-                Create Cadet Account &rarr;
+                Daftar Sekarang &rarr;
             </button>
         </form>
 
         <!-- Login Link -->
         <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-hairline); text-align: center; font-size: 0.85rem; color: var(--text-secondary);">
-            Already have an account? 
+            Sudah memiliki akun? 
             <a href="{{ route('login') }}" style="color: var(--accent-orange); font-weight: 600; text-decoration: none; margin-left: 0.25rem;">
-                Sign In &rarr;
+                Masuk di Sini &rarr;
             </a>
         </div>
 
     </div>
 </div>
 @endsection
-

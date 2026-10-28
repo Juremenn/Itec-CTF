@@ -6,10 +6,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'CyberLab') &bull; ITEC CyberLab</title>
     
-    <!-- Fonts -->
+    <!-- Fonts: Strictly Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
@@ -29,10 +29,13 @@
             --text-muted: #64748b;
         }
 
+        *, *::before, *::after, html, body, input, button, select, textarea, pre, code, kbd, samp {
+            font-family: 'Poppins', sans-serif !important;
+        }
+
         body {
             background-color: var(--bg-base);
             color: var(--text-primary);
-            font-family: 'Inter', system-ui, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -313,9 +316,9 @@
             </a>
 
             <!-- Navigation Links -->
-            @auth
             <nav>
                 <ul class="nav-links">
+                    @auth
                     <li>
                         <a href="{{ route('dashboard') }}" class="nav-item-link {{ request()->routeIs('dashboard', 'home') ? 'active' : '' }}">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -325,26 +328,28 @@
                     <li>
                         <a href="{{ route('challenges.index') }}" class="nav-item-link {{ request()->routeIs('challenges.*') ? 'active' : '' }}">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-                            Challenges
+                            Tantangan
                         </a>
                     </li>
+                    @endauth
                     <li>
-                        <a href="{{ route('scoreboard') }}" class="nav-item-link {{ request()->routeIs('scoreboard') ? 'active' : '' }}">
+                        <a href="{{ route('scoreboard') }}" class="nav-item-link {{ request()->routeIs('scoreboard*') ? 'active' : '' }}">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                            Scoreboard
+                            Papan Skor
                         </a>
                     </li>
+                    @auth
                     @if(Auth::user()->isAdmin())
                     <li>
                         <a href="{{ route('admin.index') }}" class="nav-item-link {{ request()->is('itec/admin*') ? 'active' : '' }}" style="color: #f97316;">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            Stealth Admin
+                            Panel Admin
                         </a>
                     </li>
                     @endif
+                    @endauth
                 </ul>
             </nav>
-            @endauth
         </div>
 
         <div class="nav-right-actions">
@@ -353,18 +358,18 @@
             <div style="display: flex; align-items: center; gap: 0.75rem;">
                 <div style="text-align: right; line-height: 1.2;">
                     <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">{{ Auth::user()->name }}</div>
-                    <div style="font-size: 0.7rem; color: var(--text-muted); font-family: monospace;">{{ '@' . Auth::user()->username }} &bull; {{ ucfirst(Auth::user()->role) }}</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">{{ '@' . Auth::user()->username }} &bull; {{ Auth::user()->isAdmin() ? 'Administrator' : 'Peserta' }}</div>
                 </div>
 
                 <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                     @csrf
-                    <button type="submit" class="btn-subtle" title="Sign out" style="padding: 0.4rem 0.65rem;">
+                    <button type="submit" class="btn-subtle" title="Keluar dari akun" style="padding: 0.4rem 0.65rem;">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                     </button>
                 </form>
             </div>
             @else
-            <a href="{{ route('login') }}" class="btn-orange">Sign In</a>
+            <a href="{{ route('login') }}" class="btn-orange">Masuk</a>
             @endauth
         </div>
     </header>
@@ -398,7 +403,9 @@
 
     <!-- Footer -->
     <footer class="cylab-footer">
-        <div>ITEC CyberLab Platform &bull; Educational CTF & Security Academy &bull; Powered by Laravel & MySQL</div>
+        <div>
+            &copy; {{ date('Y') }} <strong>ITEC Organization</strong> &bull; <a href="https://smkmetland.net" target="_blank" rel="noopener noreferrer" style="color: var(--text-primary); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; transition: color 0.15s ease;" onmouseover="this.style.color='var(--accent-orange)'" onmouseout="this.style.color='var(--text-primary)'">SMK Metland</a> &bull; Platform Edukasi Keamanan Siber & CTF &bull; Didukung oleh Laravel & MySQL
+        </div>
     </footer>
 
     @stack('scripts')

@@ -49,7 +49,7 @@ class AdminChallengeController extends Controller
 
         Challenge::create($validated);
 
-        return redirect()->route('admin.challenges.index')->with('success', 'Challenge created successfully.');
+        return redirect()->route('admin.challenges.index')->with('success', 'Tantangan baru berhasil dibuat.');
     }
 
     public function show(Challenge $challenge): View
@@ -83,7 +83,7 @@ class AdminChallengeController extends Controller
 
         $challenge->update($validated);
 
-        return redirect()->route('admin.challenges.index')->with('success', 'Challenge updated successfully.');
+        return redirect()->route('admin.challenges.index')->with('success', 'Tantangan berhasil diperbarui.');
     }
 
     public function destroy(Challenge $challenge): RedirectResponse
@@ -91,7 +91,7 @@ class AdminChallengeController extends Controller
         $title = $challenge->title;
         $challenge->delete();
 
-        return redirect()->route('admin.challenges.index')->with('success', "Challenge '{$title}' deleted.");
+        return redirect()->route('admin.challenges.index')->with('success', "Tantangan '{$title}' berhasil dihapus.");
     }
 }
 

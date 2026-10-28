@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Leaderboard')
+@section('title', 'Papan Skor')
 
 @section('content')
 <div style="display: flex; flex-direction: column; gap: 1.75rem;">
@@ -8,43 +8,70 @@
     <!-- Scoreboard Header & Tabs -->
     <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-hairline); padding-bottom: 1.25rem;">
         <div>
-            <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0 0 0.35rem 0; letter-spacing: -0.02em;">
-                Platform Scoreboard
+            <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.35rem 0; letter-spacing: -0.02em;">
+                Papan Skor
             </h1>
             <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">
-                Live ranking of student cadets. Administrative accounts are strictly excluded from public standings.
+                Klasemen peserta yang diperbarui secara langsung. Akun instruktur dan administrator tidak disertakan.
             </p>
         </div>
 
-        <!-- Board Tabs -->
+        <!-- Mode Tabs -->
         <div style="display: flex; gap: 0.4rem; background: var(--surface-card); padding: 0.3rem; border-radius: 8px; border: 1px solid var(--border-hairline);">
             <a href="{{ route('scoreboard', ['tab' => 'competition']) }}" class="btn-subtle" style="{{ $tab === 'competition' ? 'background: var(--surface-elevated); color: #4ade80; border-color: rgba(34, 197, 94, 0.4);' : '' }}; font-size: 0.85rem; padding: 0.45rem 1rem;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-                Competition Board
+                Papan Kompetisi
             </a>
             <a href="{{ route('scoreboard', ['tab' => 'practice']) }}" class="btn-subtle" style="{{ $tab === 'practice' ? 'background: var(--surface-elevated); color: #60a5fa; border-color: rgba(59, 130, 246, 0.4);' : '' }}; font-size: 0.85rem; padding: 0.45rem 1rem;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                All-Time Practice Board
+                Papan Latihan
             </a>
         </div>
     </div>
 
     @php
         $currentList = ($tab === 'competition') ? $competitionUsers : $practiceUsers;
+        $hasRealData = $chartData['hasRealData'] ?? false;
     @endphp
 
-    <!-- Active Tab Description Pill -->
-    <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 0.85rem 1.25rem; font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span>ℹ️</span>
+    <!-- Score Progression Timeline Chart Card -->
+    <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 10px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+        
+        <div>
+            <h2 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.25rem 0;">
+                Grafik Perkembangan Skor
+            </h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">
+                Pergerakan akumulasi poin peserta berdasarkan waktu submit flag.
+            </p>
+        </div>
+
+        <!-- Chart Container -->
+        <div style="position: relative; width: 100%; min-height: 280px;">
+            <canvas id="scoreboardChart" style="width: 100%; height: 280px; {{ $hasRealData ? '' : 'display: none;' }}"></canvas>
+            
+            <div id="chartEmptyPlaceholder" style="{{ $hasRealData ? 'display: none;' : 'display: flex;' }} min-height: 240px; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                    Grafik perkembangan skor akan muncul secara otomatis saat peserta mulai mengirimkan flag.
+                </p>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.725rem; color: var(--text-muted); border-top: 1px solid var(--border-hairline); padding-top: 0.75rem;">
+            <span>Sumbu X: Waktu &bull; Sumbu Y: Total Poin</span>
+            <span>Real-time</span>
+        </div>
+    </div>
+
+    <!-- Active Tab Description -->
+    <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 0.75rem 1.25rem; font-size: 0.825rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
             @if($tab === 'competition')
-                <span>Currently displaying <strong>Official Competition Rankings</strong> (flags captured strictly during active tournament mode).</span>
+                <span>Peringkat Resmi Turnamen (flag pada mode kompetisi).</span>
             @else
-                <span>Currently displaying <strong>Cumulative Practice Leaderboard</strong> (lifetime challenges completed across all modules).</span>
+                <span>Peringkat Akumulatif (seluruh modul yang diselesaikan).</span>
             @endif
         </div>
-        <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-muted);">
-            {{ count($currentList) }} ranked cadets
+        <div id="registeredCountNotice" style="font-size: 0.75rem; color: var(--text-muted);">
+            {{ count($currentList) }} peserta
         </div>
     </div>
 
@@ -52,67 +79,63 @@
     <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 10px; overflow: hidden;">
         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
             <thead>
-                <tr style="background: var(--surface-secondary); border-bottom: 1px solid var(--border-hairline); color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
-                    <th style="padding: 1rem 1.25rem; width: 80px;">Rank</th>
-                    <th style="padding: 1rem 1.25rem;">Cadet / Participant</th>
-                    <th style="padding: 1rem 1.25rem; width: 140px; text-align: center;">Labs Solved</th>
-                    <th style="padding: 1rem 1.25rem; width: 160px; text-align: right;">Total Points</th>
+                <tr style="background: var(--surface-secondary); border-bottom: 1px solid var(--border-hairline); color: var(--text-muted); font-size: 0.725rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <th style="padding: 0.85rem 1.25rem; width: 100px; text-align: center;">Peringkat</th>
+                    <th style="padding: 0.85rem 1.25rem;">Peserta</th>
+                    <th style="padding: 0.85rem 1.25rem; width: 140px; text-align: center;">Lab Selesai</th>
+                    <th style="padding: 0.85rem 1.25rem; width: 160px; text-align: right;">Total Poin</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="leaderboardTbody">
                 @forelse($currentList as $index => $u)
                 @php
                     $rank = $index + 1;
-                    $rankMedal = match($rank) {
-                        1 => ['color' => '#fbbf24', 'bg' => 'rgba(251, 191, 36, 0.15)', 'border' => 'rgba(251, 191, 36, 0.3)'],
-                        2 => ['color' => '#cbd5e1', 'bg' => 'rgba(203, 213, 225, 0.15)', 'border' => 'rgba(203, 213, 225, 0.3)'],
-                        3 => ['color' => '#d97706', 'bg' => 'rgba(217, 119, 6, 0.15)', 'border' => 'rgba(217, 119, 6, 0.3)'],
-                        default => ['color' => 'var(--text-muted)', 'bg' => 'transparent', 'border' => 'transparent'],
+                    $rankColor = match($rank) {
+                        1 => '#fbbf24',
+                        2 => '#cbd5e1',
+                        3 => '#d97706',
+                        default => 'var(--text-muted)',
                     };
                     $isCurrentUser = Auth::check() && Auth::id() === $u->id;
                 @endphp
-                <tr style="border-bottom: 1px solid var(--border-hairline); {{ $isCurrentUser ? 'background: rgba(249, 115, 22, 0.05);' : '' }}">
+                <tr style="border-bottom: 1px solid var(--border-hairline); {{ $isCurrentUser ? 'background: rgba(249, 115, 22, 0.04);' : '' }}">
                     
-                    <!-- Rank Column -->
-                    <td style="padding: 1rem 1.25rem;">
-                        <span style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: {{ $rankMedal['color'] }}; background: {{ $rankMedal['bg'] }}; border: 1px solid {{ $rankMedal['border'] }};">
-                            #{{ $rank }}
-                        </span>
+                    <!-- Clean Symmetrical Centered Rank -->
+                    <td style="padding: 1rem 1.25rem; text-align: center; vertical-align: middle; font-weight: 700; font-size: 1rem; color: {{ $rankColor }};">
+                        #{{ $rank }}
                     </td>
 
                     <!-- Cadet Info -->
-                    <td style="padding: 1rem 1.25rem;">
-                        <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">
+                    <td style="padding: 1rem 1.25rem; vertical-align: middle;">
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
                             {{ $u->name }}
                             @if($isCurrentUser)
-                                <span style="font-size: 0.7rem; font-weight: 700; background: var(--accent-orange); color: #fff; padding: 0.15rem 0.45rem; border-radius: 4px; margin-left: 0.4rem;">YOU</span>
+                                <span style="font-size: 0.65rem; font-weight: 600; background: var(--surface-secondary); color: var(--accent-orange); padding: 0.1rem 0.4rem; border-radius: 4px; margin-left: 0.4rem; border: 1px solid var(--border-hairline);">Anda</span>
                             @endif
                         </div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">
+                        <div style="font-size: 0.725rem; color: var(--text-muted); margin-top: 0.15rem;">
                             {{ '@' . $u->username }}
                         </div>
                     </td>
 
                     <!-- Solved Count -->
-                    <td style="padding: 1rem 1.25rem; text-align: center;">
-                        <span style="font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">
-                            {{ $u->solved_count ?? 0 }}
-                        </span>
+                    <td style="padding: 1rem 1.25rem; text-align: center; vertical-align: middle; color: var(--text-secondary); font-weight: 500;">
+                        {{ $u->solved_count ?? 0 }}
                     </td>
 
                     <!-- Points -->
-                    <td style="padding: 1rem 1.25rem; text-align: right;">
-                        <span style="font-size: 1.15rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #fbbf24;">
+                    <td style="padding: 1rem 1.25rem; text-align: right; vertical-align: middle;">
+                        <span style="font-size: 1rem; font-weight: 700; color: #fbbf24;">
                             {{ number_format($u->total_points ?? 0) }}
                         </span>
-                        <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 0.2rem;">PTS</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted); margin-left: 0.2rem;">POIN</span>
                     </td>
 
                 </tr>
                 @empty
-                <tr>
-                    <td colspan="4" style="padding: 3rem; text-align: center; color: var(--text-muted);">
-                        No entries recorded on this scoreboard yet.
+                <tr id="emptyRow">
+                    <td colspan="4" style="padding: 3.5rem 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+                        Belum ada data skor pada papan ini.
                     </td>
                 </tr>
                 @endforelse
@@ -121,5 +144,164 @@
     </div>
 
 </div>
-@endsection
 
+<!-- Chart.js Library -->
+<script src="{{ asset('assets/js/chart.min.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const activeTab = '{{ $tab }}';
+    const initialChartData = @json($chartData['datasets'] ?? []);
+    const canvas = document.getElementById('scoreboardChart');
+    const placeholder = document.getElementById('chartEmptyPlaceholder');
+    let chartInstance = null;
+
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: initialChartData
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'nearest',
+                    intersect: false,
+                    axis: 'x'
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#94a3b8',
+                            font: { family: 'Poppins', size: 11 },
+                            boxWidth: 10,
+                            padding: 12
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 17, 24, 0.95)',
+                        titleColor: '#f8fafc',
+                        bodyColor: '#cbd5e1',
+                        borderColor: '#2a3142',
+                        borderWidth: 1,
+                        padding: 8,
+                        callbacks: {
+                            title: function(items) {
+                                if (!items.length) return '';
+                                const d = new Date(items[0].raw.x);
+                                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            },
+                            label: function(item) {
+                                return ` ${item.dataset.label}: ${item.raw.y} Poin`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                        ticks: {
+                            color: '#64748b',
+                            font: { family: 'Poppins', size: 10 },
+                            callback: function(val) {
+                                const d = new Date(val);
+                                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: {
+                            color: '#64748b',
+                            font: { family: 'Poppins', size: 10 },
+                            callback: function(val) { return val + ' pts'; }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Silent background real-time updates (every 25 seconds)
+    function fetchLiveData() {
+        fetch(`{{ route('scoreboard.live_data') }}?tab=${activeTab}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Update chart
+                    if (chartInstance && data.chart) {
+                        const hasData = data.chart.hasRealData;
+                        chartInstance.data.datasets = data.chart.datasets || [];
+                        chartInstance.update();
+
+                        if (hasData) {
+                            if (canvas) canvas.style.display = 'block';
+                            if (placeholder) placeholder.style.display = 'none';
+                        } else {
+                            if (canvas) canvas.style.display = 'none';
+                            if (placeholder) placeholder.style.display = 'flex';
+                        }
+                    }
+
+                    // Update Table
+                    renderTable(data.users);
+                }
+            })
+            .catch(() => {});
+    }
+
+    function renderTable(users) {
+        const tbody = document.getElementById('leaderboardTbody');
+        const countNotice = document.getElementById('registeredCountNotice');
+        if (countNotice) countNotice.textContent = `${users.length} peserta`;
+
+        if (!users || users.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" style="padding: 3.5rem 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+                        Belum ada data skor pada papan ini.
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        let html = '';
+        users.forEach((u, idx) => {
+            const rank = idx + 1;
+            let rankColor = 'var(--text-muted)';
+            if (rank === 1) rankColor = '#fbbf24';
+            else if (rank === 2) rankColor = '#cbd5e1';
+            else if (rank === 3) rankColor = '#d97706';
+
+            html += `
+                <tr style="border-bottom: 1px solid var(--border-hairline);">
+                    <td style="padding: 1rem 1.25rem; text-align: center; vertical-align: middle; font-weight: 700; font-size: 1rem; color: ${rankColor};">
+                        #${rank}
+                    </td>
+                    <td style="padding: 1rem 1.25rem; vertical-align: middle;">
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">${u.name}</div>
+                        <div style="font-size: 0.725rem; color: var(--text-muted); margin-top: 0.15rem;">@${u.username}</div>
+                    </td>
+                    <td style="padding: 1rem 1.25rem; text-align: center; vertical-align: middle; color: var(--text-secondary); font-weight: 500;">
+                        ${u.solved_count}
+                    </td>
+                    <td style="padding: 1rem 1.25rem; text-align: right; vertical-align: middle;">
+                        <span style="font-size: 1rem; font-weight: 700; color: #fbbf24;">${u.total_points.toLocaleString()}</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted); margin-left: 0.2rem;">POIN</span>
+                    </td>
+                </tr>`;
+        });
+
+        tbody.innerHTML = html;
+    }
+
+    // Silent background interval every 25 seconds
+    setInterval(fetchLiveData, 25000);
+});
+</script>
+@endsection

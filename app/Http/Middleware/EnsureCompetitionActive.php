@@ -16,37 +16,38 @@ class EnsureCompetitionActive
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $activeMode = SystemSetting::activeMode();
         $competitionStatus = SystemSetting::competitionStatus();
         $user = $request->user();
 
-        // If platform is in competition mode:
-        if ($activeMode === 'competition') {
-            // Admin can bypass for testing
-            if ($user && $user->isAdmin()) {
-                return $next($request);
+        // Admin can always bypass for testing and administrative previews
+        if ($user && $user->isAdmin()) {
+            return $next($request);
+        }
+
+        // When competition status is NOT active (i.e. paused, upcoming, ended):
+        // All flag submissions and interactive lab access are hard-locked
+        if ($competitionStatus !== 'active') {
+            $statusLabel = match ($competitionStatus) {
+                'upcoming' => 'belum dimulai',
+                'paused'   => 'sedang dijeda oleh instruktur',
+                'ended'    => 'telah berakhir',
+                default    => 'sedang dikunci',
+            };
+
+            $message = "Akses pengerjaan tantangan dan pengiriman flag dikunci karena status kompetisi {$statusLabel}.";
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $message,
+                ], 403);
             }
 
-            // For students/participants, check if competition is strictly active
-            if ($competitionStatus !== 'active') {
-                $statusLabel = match ($competitionStatus) {
-                    'upcoming' => 'has not started yet',
-                    'paused' => 'is currently paused',
-                    'ended' => 'has concluded',
-                    default => 'is currently locked',
-                };
-
-                $message = "Competition flag submissions are locked because the competition {$statusLabel}.";
-
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => $message,
-                    ], 403);
-                }
-
+            if ($request->isMethod('post')) {
                 return back()->with('error', $message);
             }
+
+            return redirect()->route('challenges.index')->with('error', $message);
         }
 
         return $next($request);

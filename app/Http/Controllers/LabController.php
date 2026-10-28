@@ -27,13 +27,13 @@ class LabController extends Controller
             try {
                 $user = DB::selectOne($rawSql);
                 if ($user) {
-                    $message = "Authentication successful as: " . htmlspecialchars($user->username);
+                    $message = "Otentikasi berhasil sebagai akun: " . htmlspecialchars($user->username);
                     $flag = 'FLAG{sql1_byp4ss_m4st3r}';
                 } else {
-                    $message = 'Authentication failed: Invalid credentials.';
+                    $message = 'Otentikasi gagal: Kredensial tidak valid.';
                 }
             } catch (\Throwable $e) {
-                $message = 'Database Syntax Exception: ' . htmlspecialchars($e->getMessage());
+                $message = 'Kesalahan Sintaks Database (SQL Exception): ' . htmlspecialchars($e->getMessage());
             }
         }
 
@@ -57,7 +57,7 @@ class LabController extends Controller
             try {
                 $results = DB::select($rawSql);
             } catch (\Throwable $e) {
-                $error = 'SQL Execution Error: ' . htmlspecialchars($e->getMessage());
+                $error = 'Kesalahan Eksekusi SQL: ' . htmlspecialchars($e->getMessage());
             }
         } else {
             $results = DB::table('products')->limit(5)->get();

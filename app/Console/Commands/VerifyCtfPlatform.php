@@ -58,21 +58,22 @@ class VerifyCtfPlatform extends Command
             $failed++;
         }
 
-        // Test 2: Verify Default Accounts
-        $this->comment("\n[2] Verifying User Accounts & Public View Sanitation...");
+        // Test 2: Verify Admin Account & Leaderboard Cleanliness
+        $this->comment("\n[2] Verifying Admin Account & Clean Leaderboard State...");
         $admin = User::where('username', 'admin')->first();
         if ($admin && $admin->role === 'admin' && Hash::check('Admin12345!', $admin->password)) {
-            $this->line("  ✓ Admin account verified (username: admin, role: admin).");
+            $this->line("  ✓ Admin account verified (username: admin, password: Admin12345!, role: admin).");
         } else {
             $this->error("  ✗ Admin account mismatch or password check failed.");
             $failed++;
         }
 
-        $alice = User::where('username', 'alice')->first();
-        if ($alice && $alice->role === 'participant') {
-            $this->line("  ✓ Participant account verified (username: alice, role: participant).");
+        // Verify zero seeded dummy participants on leaderboard
+        $dummyCount = User::whereIn('username', ['alice', 'bob', 'charlie'])->count();
+        if ($dummyCount === 0) {
+            $this->line("  ✓ Leaderboard is strictly clean: Zero seeded dummy accounts ('alice', 'bob', 'charlie') present.");
         } else {
-            $this->error("  ✗ Participant account missing.");
+            $this->error("  ✗ Seeded dummy participants still present in database ({$dummyCount} found)!");
             $failed++;
         }
 
@@ -85,15 +86,25 @@ class VerifyCtfPlatform extends Command
             $failed++;
         }
 
+        // Verify registration view does NOT contain unwanted anti-sybil banner
+        $registerViewContent = view('auth.register', ['errors' => new \Illuminate\Support\ViewErrorBag])->render();
+        if (!str_contains($registerViewContent, 'Kebijakan Anti-Sybil')) {
+            $this->line("  ✓ Public register view is clean: Anti-sybil policy text removed.");
+        } else {
+            $this->error("  ✗ Unwanted policy text found in register view!");
+            $failed++;
+        }
+
         // Test 3: Stealth Admin Routing & 404 Response
         $this->comment("\n[3] Verifying Stealth Admin Routing & 404 Response...");
         $middleware = new \App\Http\Middleware\StealthAdmin();
 
         // 3a: Non-admin participant
-        $reqAlice = \Illuminate\Http\Request::create('/itec/admin', 'GET');
-        $reqAlice->setUserResolver(fn() => $alice);
+        $mockStudent = new User(['id' => 999, 'name' => 'Cadet Tester', 'username' => 'tester', 'role' => 'participant']);
+        $reqStudent = \Illuminate\Http\Request::create('/itec/admin', 'GET');
+        $reqStudent->setUserResolver(fn() => $mockStudent);
         try {
-            $middleware->handle($reqAlice, fn() => response('OK'));
+            $middleware->handle($reqStudent, fn() => response('OK'));
             $this->error("  ✗ Participant was NOT blocked from stealth admin!");
             $failed++;
         } catch (\Symfony\Component\HttpKernel\Exception\HttpException $e) {
@@ -126,47 +137,78 @@ class VerifyCtfPlatform extends Command
             $failed++;
         }
 
-        // Test 4: Dual Mode System & Hard-Locked Flag Submission
-        $this->comment("\n[4] Verifying Dual-Mode Middleware Flag Lock...");
+        // Test 4: Master Gate State & Hard-Locked Challenges (Paused, Ended, Upcoming)
+        $this->comment("\n[4] Verifying Master Gate State & Hard-Locked Challenges...");
         $ensureMiddleware = new \App\Http\Middleware\EnsureCompetitionActive();
 
-        // Set competition to paused
-        SystemSetting::set('active_mode', 'competition');
+        $submitReq = \Illuminate\Http\Request::create('/challenges/1/submit', 'POST');
+        $submitReq->setUserResolver(fn() => $mockStudent);
+        $submitReq->headers->set('Accept', 'application/json');
+
+        $labReq = \Illuminate\Http\Request::create('/lab/sqli-login', 'GET');
+        $labReq->setUserResolver(fn() => $mockStudent);
+
+        // 4a. Set competition to paused
         SystemSetting::set('competition_status', 'paused');
         SystemSetting::clearCache();
 
-        $submitReq = \Illuminate\Http\Request::create('/challenges/1/submit', 'POST');
-        $submitReq->setUserResolver(fn() => $alice);
-        $submitReq->headers->set('Accept', 'application/json');
-
-        $lockRes = $ensureMiddleware->handle($submitReq, fn() => response('ALLOWED'));
-        if ($lockRes->getStatusCode() === 403) {
-            $this->line("  ✓ Submission strictly hard-locked when Competition is PAUSED (403 returned).");
+        $lockPausedRes = $ensureMiddleware->handle($submitReq, fn() => response('ALLOWED'));
+        $labPausedRes = $ensureMiddleware->handle($labReq, fn() => response('ALLOWED'));
+        if ($lockPausedRes->getStatusCode() === 403 && $labPausedRes->isRedirect(route('challenges.index'))) {
+            $this->line("  ✓ When status is PAUSED (Dijeda): Submissions and lab access are strictly hard-locked.");
         } else {
-            $this->error("  ✗ Submission was not hard-locked during paused competition! Code: " . $lockRes->getStatusCode());
+            $this->error("  ✗ Paused status did not lock submissions or lab access properly!");
             $failed++;
         }
 
-        // Set competition to active
+        // 4b. Set competition to ended
+        SystemSetting::set('competition_status', 'ended');
+        SystemSetting::clearCache();
+
+        $lockEndedRes = $ensureMiddleware->handle($submitReq, fn() => response('ALLOWED'));
+        $labEndedRes = $ensureMiddleware->handle($labReq, fn() => response('ALLOWED'));
+        if ($lockEndedRes->getStatusCode() === 403 && $labEndedRes->isRedirect(route('challenges.index'))) {
+            $this->line("  ✓ When status is ENDED (Selesai): Submissions and lab access are strictly hard-locked.");
+        } else {
+            $this->error("  ✗ Ended status did not lock submissions or lab access properly!");
+            $failed++;
+        }
+
+        // 4c. Set competition to upcoming
+        SystemSetting::set('competition_status', 'upcoming');
+        SystemSetting::clearCache();
+
+        $lockUpcomingRes = $ensureMiddleware->handle($submitReq, fn() => response('ALLOWED'));
+        $labUpcomingRes = $ensureMiddleware->handle($labReq, fn() => response('ALLOWED'));
+        if ($lockUpcomingRes->getStatusCode() === 403 && $labUpcomingRes->isRedirect(route('challenges.index'))) {
+            $this->line("  ✓ When status is UPCOMING (Akan Datang): Submissions and lab access are strictly hard-locked.");
+        } else {
+            $this->error("  ✗ Upcoming status did not lock submissions or lab access properly!");
+            $failed++;
+        }
+
+        // 4d. Set competition to active
         SystemSetting::set('competition_status', 'active');
         SystemSetting::clearCache();
         $activeRes = $ensureMiddleware->handle($submitReq, fn() => response('ALLOWED'));
-        if ($activeRes->getContent() === 'ALLOWED') {
-            $this->line("  ✓ Submission allowed through when Competition is ACTIVE.");
+        $activeLabRes = $ensureMiddleware->handle($labReq, fn() => response('ALLOWED'));
+        if ($activeRes->getContent() === 'ALLOWED' && $activeLabRes->getContent() === 'ALLOWED') {
+            $this->line("  ✓ When status is ACTIVE (Aktif): Submissions and interactive labs are unlocked.");
         } else {
-            $this->error("  ✗ Active competition submission failed.");
+            $this->error("  ✗ Active competition submission or lab access failed.");
             $failed++;
         }
 
-        // Test in Training mode
-        SystemSetting::set('active_mode', 'training');
+        // 4e. Admin bypass when paused
         SystemSetting::set('competition_status', 'paused');
         SystemSetting::clearCache();
-        $trainingRes = $ensureMiddleware->handle($submitReq, fn() => response('ALLOWED'));
-        if ($trainingRes->getContent() === 'ALLOWED') {
-            $this->line("  ✓ In Training Mode, open-ended submissions remain unlocked regardless of competition state.");
+        $adminSubmitReq = \Illuminate\Http\Request::create('/challenges/1/submit', 'POST');
+        $adminSubmitReq->setUserResolver(fn() => $admin);
+        $adminRes = $ensureMiddleware->handle($adminSubmitReq, fn() => response('ALLOWED'));
+        if ($adminRes->getContent() === 'ALLOWED') {
+            $this->line("  ✓ Administrator bypass verified: Admin can preview and test challenges during locked states.");
         } else {
-            $this->error("  ✗ Training mode submission failed.");
+            $this->error("  ✗ Admin bypass failed during locked state.");
             $failed++;
         }
 
@@ -224,13 +266,48 @@ class VerifyCtfPlatform extends Command
         // Clean up rate limit test records
         User::where('registration_ip', $testIp)->delete();
 
-        // Test 7: Verify Branding Assets
-        $this->comment("\n[7] Verifying Branding Logo Asset...");
+        // Test 7: Verify Typography & Branding
+        $this->comment("\n[7] Verifying Strict Typography (Poppins Only) & Branding Assets...");
+        $layoutContent = file_get_contents(resource_path('views/layouts/app.blade.php'));
+        if (str_contains($layoutContent, 'family=Poppins') && str_contains($layoutContent, "font-family: 'Poppins', sans-serif !important;") && !str_contains($layoutContent, 'family=Inter')) {
+            $this->line("  ✓ Strict Poppins typography enforced across all UI elements.");
+        } else {
+            $this->error("  ✗ Typography check failed: Non-Poppins font or missing !important rule in layout.");
+            $failed++;
+        }
+
         $logoPath = public_path('assets/img/logoitec.jpg');
         if (file_exists($logoPath)) {
             $this->line("  ✓ Organization logo present at: {$logoPath}");
         } else {
             $this->error("  ✗ Organization logo missing at: {$logoPath}");
+            $failed++;
+        }
+
+        // Test 8: Verifying Footer Branding (ITEC Organization & SMK Metland) and Public Livescoreboard
+        $this->comment("\n[8] Verifying Footer Branding & Public Livescoreboard...");
+        if (str_contains($layoutContent, 'ITEC Organization') && str_contains($layoutContent, 'smkmetland.net') && str_contains($layoutContent, 'SMK Metland')) {
+            $this->line("  ✓ Footer branding verified: 'ITEC Organization' & link to 'smkmetland.net'.");
+        } else {
+            $this->error("  ✗ Footer branding missing 'ITEC Organization' or 'smkmetland.net'.");
+            $failed++;
+        }
+
+        $chartJsPath = public_path('assets/js/chart.min.js');
+        if (file_exists($chartJsPath)) {
+            $this->line("  ✓ Local Chart.js bundle verified for score progression timeline graph.");
+        } else {
+            $this->error("  ✗ Missing local Chart.js at: {$chartJsPath}");
+            $failed++;
+        }
+
+        // Verify public scoreboard accessibility (guest access allowed)
+        $scoreReq = \Illuminate\Http\Request::create('/scoreboard', 'GET');
+        $scoreRes = app()->handle($scoreReq);
+        if ($scoreRes->getStatusCode() === 200) {
+            $this->line("  ✓ Public Livescoreboard is accessible without authentication (guests & spectators allowed).");
+        } else {
+            $this->error("  ✗ Public scoreboard access failed with status: {$scoreRes->getStatusCode()}");
             $failed++;
         }
 

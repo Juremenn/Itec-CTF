@@ -8,10 +8,10 @@
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-hairline); padding-bottom: 1rem;">
         <div>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">
-                <a href="{{ route('challenges.show', 'sqli-union-exfiltration') }}" style="color: var(--accent-orange); text-decoration: none;">&larr; Back to Challenge Details</a>
+                <a href="{{ route('challenges.show', 'sqli-union-exfiltration') }}" style="color: var(--accent-orange); text-decoration: none;">&larr; Kembali ke Detail Tantangan</a>
             </div>
             <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin: 0;">
-                Target: Product Catalog Search API
+                Target: API Pencarian Katalog Produk
             </h1>
         </div>
     </div>
@@ -22,17 +22,17 @@
                 type="text" 
                 name="q" 
                 value="{{ $q }}" 
-                placeholder="Search products or inject UNION payload..." 
-                style="flex: 1; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-family: monospace; font-size: 0.9rem; outline: none;"
+                placeholder="Cari produk atau suntikkan payload UNION SELECT..." 
+                style="flex: 1; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-size: 0.9rem; outline: none;"
             >
             <button type="submit" class="btn-orange" style="padding: 0.65rem 1.25rem;">
-                Execute Query &rarr;
+                Eksekusi Query &rarr;
             </button>
         </form>
 
         @if($executedQuery)
-        <div style="background: var(--surface-secondary); border: 1px solid var(--border-hairline); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #60a5fa; word-break: break-all;">
-            <span style="color: var(--text-muted);">Assembled SQL:</span> {{ $executedQuery }}
+        <div style="background: var(--surface-secondary); border: 1px solid var(--border-hairline); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.8rem; color: #60a5fa; word-break: break-all;">
+            <span style="color: var(--text-muted);">SQL yang Dihasilkan:</span> {{ $executedQuery }}
         </div>
         @endif
 
@@ -48,10 +48,10 @@
                 <thead>
                     <tr style="background: var(--surface-secondary); border-bottom: 1px solid var(--border-hairline); color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">
                         <th style="padding: 0.75rem 1rem;">ID</th>
-                        <th style="padding: 0.75rem 1rem;">Name / Key</th>
-                        <th style="padding: 0.75rem 1rem;">Category</th>
-                        <th style="padding: 0.75rem 1rem;">Price</th>
-                        <th style="padding: 0.75rem 1rem;">Description / Value</th>
+                        <th style="padding: 0.75rem 1rem;">Nama / Kunci</th>
+                        <th style="padding: 0.75rem 1rem;">Kategori</th>
+                        <th style="padding: 0.75rem 1rem;">Harga</th>
+                        <th style="padding: 0.75rem 1rem;">Deskripsi / Nilai</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,7 +60,7 @@
                         $isFlag = is_object($row) && (str_contains($row->description ?? '', 'FLAG{') || str_contains($row->name ?? '', 'FLAG{') || str_contains($row->category ?? '', 'FLAG{'));
                     @endphp
                     <tr style="border-bottom: 1px solid var(--border-hairline); {{ $isFlag ? 'background: rgba(34, 197, 94, 0.15);' : '' }}">
-                        <td style="padding: 0.75rem 1rem; font-family: monospace; color: var(--text-secondary);">
+                        <td style="padding: 0.75rem 1rem; color: var(--text-secondary);">
                             {{ is_object($row) ? $row->id : $row['id'] }}
                         </td>
                         <td style="padding: 0.75rem 1rem; font-weight: 600; color: {{ $isFlag ? '#4ade80' : 'var(--text-primary)' }};">
@@ -69,17 +69,17 @@
                         <td style="padding: 0.75rem 1rem; color: var(--text-secondary);">
                             {{ is_object($row) ? $row->category : $row['category'] }}
                         </td>
-                        <td style="padding: 0.75rem 1rem; font-family: monospace; color: #fbbf24;">
+                        <td style="padding: 0.75rem 1rem; color: #fbbf24;">
                             ${{ number_format((float)(is_object($row) ? $row->price : $row['price']), 2) }}
                         </td>
-                        <td style="padding: 0.75rem 1rem; color: {{ $isFlag ? '#4ade80' : 'var(--text-secondary)' }}; font-family: {{ $isFlag ? 'monospace' : 'inherit' }}; font-weight: {{ $isFlag ? '700' : 'normal' }};">
+                        <td style="padding: 0.75rem 1rem; color: {{ $isFlag ? '#4ade80' : 'var(--text-secondary)' }}; font-weight: {{ $isFlag ? '700' : 'normal' }};">
                             {{ is_object($row) ? $row->description : $row['description'] }}
                         </td>
                     </tr>
                     @empty
                     <tr>
                         <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">
-                            No products matching query.
+                            Tidak ada produk yang cocok dengan parameter pencarian.
                         </td>
                     </tr>
                     @endforelse
@@ -91,4 +91,3 @@
 
 </div>
 @endsection
-

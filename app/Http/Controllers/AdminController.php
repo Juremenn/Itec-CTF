@@ -49,11 +49,11 @@ class AdminController extends Controller
             }
 
             $request->session()->regenerate();
-            return redirect()->route('admin.index')->with('success', 'Authenticated into Administrative Control Center.');
+            return redirect()->route('admin.index')->with('success', 'Berhasil masuk ke Pusat Kontrol Administrator.');
         }
 
         return back()->withErrors([
-            'login' => 'Invalid administrative credentials.',
+            'login' => 'Kredensial administrator tidak valid.',
         ])->onlyInput('login');
     }
 
@@ -118,7 +118,7 @@ class AdminController extends Controller
 
         SystemSetting::clearCache();
 
-        return back()->with('success', 'System operating state updated successfully.');
+        return back()->with('success', 'Status operasional sistem berhasil diperbarui.');
     }
 
     public function setBroadcast(Request $request): RedirectResponse
@@ -131,7 +131,7 @@ class AdminController extends Controller
         SystemSetting::set('broadcast_message', $message);
         SystemSetting::clearCache();
 
-        return back()->with('success', 'Global broadcast banner updated.');
+        return back()->with('success', 'Banner pengumuman global berhasil diperbarui.');
     }
 
     public function purgeScores(Request $request): RedirectResponse
@@ -141,11 +141,11 @@ class AdminController extends Controller
         ]);
 
         if ($request->input('confirm_reset') !== 'RESET') {
-            return back()->with('error', 'Reset confirmation phrase mismatched. Please type "RESET" to confirm score wipe.');
+            return back()->with('error', 'Frasa konfirmasi reset tidak cocok. Silakan ketik "RESET" untuk mengonfirmasi penghapusan skor.');
         }
 
         Solve::truncate();
 
-        return back()->with('success', 'Scoreboard records purged successfully. Participant accounts were preserved.');
+        return back()->with('success', 'Data papan skor berhasil direset. Akun peserta tetap aman.');
     }
 }
