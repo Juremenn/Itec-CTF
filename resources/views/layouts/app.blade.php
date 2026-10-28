@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'CyberLab') &bull; ITEC CyberLab 101</title>
+    <title>@yield('title', 'CyberLab') &bull; ITEC CyberLab</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -309,7 +309,6 @@
                 <img src="{{ asset('assets/img/logoitec.jpg') }}" alt="ITEC Logo" class="nav-logo-img">
                 <span class="nav-brand-title">
                     ITEC CyberLab
-                    <span class="nav-brand-badge">CTF 101</span>
                 </span>
             </a>
 
@@ -349,36 +348,6 @@
         </div>
 
         <div class="nav-right-actions">
-            <!-- Mode Status Pill -->
-            @if($activeMode === 'training')
-                <div class="status-pill pill-training" title="Open-ended study mode: hints & walkthroughs enabled">
-                    <span class="status-dot"></span>
-                    <span>Training Mode</span>
-                </div>
-            @else
-                @if($competitionStatus === 'active')
-                    <div class="status-pill pill-competition-active" title="Competition is live! Flag submissions active">
-                        <span class="status-dot"></span>
-                        <span>Competition Active</span>
-                    </div>
-                @elseif($competitionStatus === 'paused')
-                    <div class="status-pill pill-competition-paused" title="Flag submissions currently locked">
-                        <span class="status-dot"></span>
-                        <span>Competition Paused</span>
-                    </div>
-                @elseif($competitionStatus === 'upcoming')
-                    <div class="status-pill pill-competition-upcoming" title="Competition starting soon">
-                        <span class="status-dot"></span>
-                        <span>Competition Upcoming</span>
-                    </div>
-                @else
-                    <div class="status-pill pill-competition-paused">
-                        <span class="status-dot"></span>
-                        <span>Competition Ended</span>
-                    </div>
-                @endif
-            @endif
-
             @auth
             <!-- User Info & Logout -->
             <div style="display: flex; align-items: center; gap: 0.75rem;">

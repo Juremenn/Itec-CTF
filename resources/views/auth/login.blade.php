@@ -9,7 +9,7 @@
         <!-- Logo & Header -->
         <div style="text-align: center; margin-bottom: 2rem;">
             <img src="{{ asset('assets/img/logoitec.jpg') }}" alt="ITEC Logo" style="height: 64px; width: auto; border-radius: 10px; margin-bottom: 1rem; border: 1px solid var(--border-hairline);">
-            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem; letter-spacing: -0.02em;">ITEC CyberLab 101</h2>
+            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem; letter-spacing: -0.02em;">ITEC CyberLab</h2>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Sign in to access your cybersecurity practice dashboard</p>
         </div>
 

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'competition_status' => 'paused',
             'platform_mode'      => 'training',
             'active_mode'        => 'training',
-            'broadcast_message'  => 'Welcome to ITEC CyberLab Practice Platform! Platform is in Training Mode.',
+            'broadcast_message'  => '',
             'competition_start'  => '',
             'competition_end'    => '',
         ];

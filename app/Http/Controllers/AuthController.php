@@ -36,14 +36,6 @@ class AuthController extends Controller
         // Allow login by either username or email
         $loginField = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        // Check if attempting admin login through the student portal
-        $targetUser = User::where($loginField, $credentials['login'])->first();
-        if ($targetUser && $targetUser->isAdmin()) {
-            return back()->withErrors([
-                'login' => 'Akses ditolak: Akun administrator hanya diizinkan masuk melalui portal khusus /itec/admin.',
-            ])->onlyInput('login');
-        }
-
         $attemptData = [
             $loginField => $credentials['login'],
             'password'  => $credentials['password'],
@@ -51,6 +43,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($attemptData, $remember)) {
             $request->session()->regenerate();
+
+            // If administrator logs in, automatically redirect to stealth control center
+            if (Auth::user()->isAdmin()) {
+                return redirect()->intended(route('admin.index'))->with('success', 'Selamat datang di Control Center Administrator.');
+            }
+
             return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, ' . Auth::user()->name . '!');
         }
 
