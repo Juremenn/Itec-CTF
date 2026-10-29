@@ -60,19 +60,6 @@ class DatabaseSeeder extends Seeder
                 'is_active'   => true,
             ],
             [
-                'title'       => 'SQL Injection: Eksfiltrasi Data UNION',
-                'slug'        => 'sqli-union-exfiltration',
-                'category'    => 'web',
-                'difficulty'  => 'medium',
-                'points'      => 150,
-                'flag'        => 'FLAG{uni0n_s3l3ct_h3r0}',
-                'description' => 'Endpoint pencarian katalog rentan terhadap injeksi UNION SQL. Tentukan jumlah kolom yang dikembalikan query dan lakukan eksfiltrasi data rahasia dari tabel secrets.',
-                'hint'        => "Tentukan jumlah kolom query menggunakan klausa ORDER BY atau UNION SELECT null, null, null, null... Kemudian ambil isi dari tabel secrets (id, key, value).",
-                'remediation' => "Gunakan query terparameterisasi secara konsisten dan terapkan validasi input yang ketat pada setiap parameter filter pencarian.",
-                'mode_target' => 'both',
-                'is_active'   => true,
-            ],
-            [
                 'title'       => 'Insecure Direct Object Reference (IDOR): Kebocoran Profil',
                 'slug'        => 'idor-profile-leak',
                 'category'    => 'web',
@@ -125,32 +112,6 @@ class DatabaseSeeder extends Seeder
                 'is_active'   => true,
             ],
             [
-                'title'       => 'Pembalikan Hash & Rainbow Table Cracking',
-                'slug'        => 'crypto-hash-inversion',
-                'category'    => 'crypto',
-                'difficulty'  => 'medium',
-                'points'      => 150,
-                'flag'        => 'FLAG{md5_unc0nd1t10n4l_c0ll1s10n}',
-                'description' => 'Sebuah kebocoran data memperlihatkan hash MD5 tanpa salt: "b9c3f4e9124be97193259dd1a47313bf". Pecahkan hash tersebut untuk menemukan kata sandi teks aslinya.',
-                'hint'        => "Gunakan basis data lookup tabel pelangi (rainbow table) online atau jalankan pemecah kata sandi dengan kamus kata sandi umum.",
-                'remediation' => "Simpan kata sandi menggunakan fungsi hash kriptografi adaptif dan lambat seperti Argon2id atau Bcrypt dengan salt acak yang unik.",
-                'mode_target' => 'both',
-                'is_active'   => true,
-            ],
-            [
-                'title'       => 'Pengintaian DNS & Subdomain Server',
-                'slug'        => 'recon-subdomain-discovery',
-                'category'    => 'recon',
-                'difficulty'  => 'hard',
-                'points'      => 200,
-                'flag'        => 'FLAG{subd0m41n_3num3r4t10n_succ3ss}',
-                'description' => 'Periksa metadata header HTTP dan sertifikat TLS SAN (Subject Alternative Names) untuk menemukan server pementasan (staging) internal tim pengembang.',
-                'hint'        => "Selidiki log transparansi sertifikat atau header virtual host untuk domain staging.itec.cyberlab.local.",
-                'remediation' => "Pastikan server pementasan (staging) berada di jaringan privat terisolasi (VPC internal) tanpa DNS publik atau pencatatan sertifikat publik.",
-                'mode_target' => 'both',
-                'is_active'   => true,
-            ],
-            [
                 'title'       => 'Wave a Flag - Eksekusi Binary Bantuan',
                 'slug'        => 'wave-a-flag',
                 'category'    => 'general',
@@ -172,6 +133,9 @@ class DatabaseSeeder extends Seeder
                 $data
             );
         }
+
+        // Purge challenges that have been removed from the seeder list
+        Challenge::whereNotIn('slug', array_column($challengesData, 'slug'))->delete();
 
         // 4. Seed Vulnerable Lab data (Products, Secrets, Profiles)
         DB::table('products')->truncate();

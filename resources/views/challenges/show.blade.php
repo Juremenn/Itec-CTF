@@ -134,20 +134,6 @@
                             Buka Konsol Target: /lab/sqli-login {{ $isSubmissionLocked ? '(Pratinjau Admin)' : '' }} &nearr;
                         </a>
                     @endif
-                @elseif($challenge->slug === 'sqli-union-exfiltration')
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5;">
-                        Target interaktif: Katalog Pencarian Produk. Lakukan teknik UNION SELECT untuk mengekstrak data dari tabel rahasia.
-                    </p>
-                    @if($isSubmissionLocked && !$isAdmin)
-                        <button type="button" disabled class="btn-subtle" style="width: 100%; justify-content: center; box-sizing: border-box; opacity: 0.6; cursor: not-allowed; border-color: var(--border-hairline); color: var(--text-muted); background: var(--surface-secondary); display: flex; align-items: center; gap: 0.4rem;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            Target Lab Dikunci
-                        </button>
-                    @else
-                        <a href="{{ route('lab.sqli_search') }}" target="_blank" class="btn-subtle" style="width: 100%; justify-content: center; box-sizing: border-box;">
-                            Buka Endpoint Target: /lab/sqli-search {{ $isSubmissionLocked ? '(Pratinjau Admin)' : '' }} &nearr;
-                        </a>
-                    @endif
                 @elseif($challenge->slug === 'idor-profile-leak')
                     <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5;">
                         Target interaktif: Portal Profil Pengguna. Sistem mempercayai parameter ID tanpa memvalidasi hak akses otorisasi pemilik.

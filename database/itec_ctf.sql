@@ -106,13 +106,10 @@ LOCK TABLES `challenges` WRITE;
 /*!40000 ALTER TABLE `challenges` DISABLE KEYS */;
 INSERT INTO `challenges` VALUES
 (1,'SQL Injection: Bypass Otentikasi','sqli-login-bypass','web','easy',100,'FLAG{sql1_byp4ss_m4st3r}','Formulir login target menggabungkan input pengguna secara langsung ke dalam query SQL tanpa parameter prepared statement. Lewati mekanisme otentikasi tanpa kredensial akun yang valid.','Coba batalkan validasi kata sandi menggunakan sintaks komentar SQL: admin\' -- atau \' OR \'1\'=\'1','Gunakan prepared statements dengan query terparameterisasi (seperti PDO prepared statements atau Eloquent ORM) untuk memisahkan struktur query dari input data.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
-(2,'SQL Injection: Eksfiltrasi Data UNION','sqli-union-exfiltration','web','medium',150,'FLAG{uni0n_s3l3ct_h3r0}','Endpoint pencarian katalog rentan terhadap injeksi UNION SQL. Tentukan jumlah kolom yang dikembalikan query dan lakukan eksfiltrasi data rahasia dari tabel secrets.','Tentukan jumlah kolom query menggunakan klausa ORDER BY atau UNION SELECT null, null, null, null... Kemudian ambil isi dari tabel secrets (id, key, value).','Gunakan query terparameterisasi secara konsisten dan terapkan validasi input yang ketat pada setiap parameter filter pencarian.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
 (3,'Insecure Direct Object Reference (IDOR): Kebocoran Profil','idor-profile-leak','web','easy',100,'FLAG{id0r_p4th_tr4v3rs4l}','Halaman gateway profil mempercayai parameter identifikasi numerik (ID) yang dikirim pengguna tanpa memverifikasi hak akses otorisasi. Lakukan enumerasi ID untuk menemukan profil administrator yang tersembunyi.','Ubah parameter id pada query URL bilah peramban. Lakukan enumerasi angka atau periksa nilai tinggi seperti ?id=99.','Terapkan pemeriksaan otorisasi di sisi server untuk memvalidasi bahwa pengguna yang mengakses memiliki hak resmi untuk melihat objek data tersebut.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
 (4,'Reflected Cross-Site Scripting (XSS)','xss-reflected','web','easy',100,'FLAG{xss_r3fl3ct3d_pwn3d}','Parameter pencarian merefleksikan string payload yang tidak disanitasi langsung ke dalam DOM peramban. Suntikkan payload JavaScript untuk mengeksekusi skrip berbahaya sembarang.','Masukkan payload JavaScript seperti <script>alert(1)</script> atau payload error gambar seperti <img src=x onerror=alert(1)>.','Terapkan context-aware HTML entity encoding (seperti htmlspecialchars) pada setiap output dinamis dan terapkan Content Security Policy (CSP) yang ketat.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
 (5,'Pengungkapan Informasi & Pengintaian Web','info-disclosure-recon','recon','easy',75,'FLAG{h1dd3n_p4n3l_f0und}','Konfigurasi endpoint dan komentar kode pengembang membocorkan rute administratif internal. Telusuri artefak kebijakan pengindeksan perayap web untuk menemukan konsol debug tersembunyi.','Periksa file /robots.txt atau komentar kode sumber HTML untuk menemukan rute direktori rahasia atau portal pemeliharaan.','Jangan mengandalkan konsep obscurity atau robots.txt untuk keamanan. Batasi rute sensitif menggunakan middleware otentikasi dan firewall jaringan.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
 (6,'Kelemahan Kriptografi: Analisis Caesar Cipher','crypto-caesar-cipher','crypto','easy',100,'FLAG{c43s4r_c1ph3r_cr4ck3d}','Sebuah transmisi data yang berhasil dicegat berisi pesan terenkripsi menggunakan sandi substitusi alfabet: \"SYNT{p43f4e_p1cu3e_pe4px3q}\". Dekripsi sandi tersebut untuk mendapatkan token flag aslinya.','Analisis pergeseran alfabet. Perhatikan bahwa huruf \'S\' bergeser menjadi \'F\' dengan rotasi 13 langkah (ROT13)!','Jangan pernah menggunakan sandi substitusi klasik untuk data sensitif. Gunakan standar enkripsi modern seperti AES-256-GCM atau ChaCha20-Poly1305.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
-(7,'Pembalikan Hash & Rainbow Table Cracking','crypto-hash-inversion','crypto','medium',150,'FLAG{md5_unc0nd1t10n4l_c0ll1s10n}','Sebuah kebocoran data memperlihatkan hash MD5 tanpa salt: \"b9c3f4e9124be97193259dd1a47313bf\". Pecahkan hash tersebut untuk menemukan kata sandi teks aslinya.','Gunakan basis data lookup tabel pelangi (rainbow table) online atau jalankan pemecah kata sandi dengan kamus kata sandi umum.','Simpan kata sandi menggunakan fungsi hash kriptografi adaptif dan lambat seperti Argon2id atau Bcrypt dengan salt acak yang unik.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
-(8,'Pengintaian DNS & Subdomain Server','recon-subdomain-discovery','recon','hard',200,'FLAG{subd0m41n_3num3r4t10n_succ3ss}','Periksa metadata header HTTP dan sertifikat TLS SAN (Subject Alternative Names) untuk menemukan server pementasan (staging) internal tim pengembang.','Selidiki log transparansi sertifikat atau header virtual host untuk domain staging.itec.cyberlab.local.','Pastikan server pementasan (staging) berada di jaringan privat terisolasi (VPC internal) tanpa DNS publik atau pencatatan sertifikat publik.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
 (9,'Wave a Flag - Eksekusi Binary Bantuan','wave-a-flag','general','easy',100,'FLAG{b1scu1ts_4nd_gr4vy_57d8c79}','Dapatkah Anda memanggil opsi bantuan (help flag) dari sebuah tool atau program biner? Program biner ini menyimpan informasi yang sangat bermanfaat... warm','1. Program ini hanya dapat berjalan di Linux webshell atau komputer berbasis Linux.\n2. Untuk mengunduh file ke shell/terminal Anda, jalankan perintah: wget <URL>, di mana URL dapat ditemukan di bagian detail tantangan.\n3. Jalankan program dengan mengetik: ./warm, namun pastikan Anda telah memberikan izin eksekusi terlebih dahulu menggunakan: chmod +x warm\n4. Argumen -h dan --help adalah parameter paling umum untuk meminta informasi bantuan dari suatu program atau biner!\n5. Tidak semua program mengimplementasikan fitur bantuan seperti -h dan --help.','Saat mengompilasi biner produksi dan perkakas baris perintah, jangan pernah menanamkan (hardcode) flag sensitif, token rahasia, atau kredensial privat ke dalam menu bantuan, string debug, atau seksi data biner.','both',1,'2026-10-29 05:45:31','2026-10-29 05:45:31');
 /*!40000 ALTER TABLE `challenges` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -308,16 +305,16 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
 INSERT INTO `products` VALUES
-(1,'Laptop Pro X1','Elektronik',1299.99,'Laptop performa tinggi dengan RAM 32GB','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(2,'Mouse Nirkabel','Aksesoris',29.99,'Mouse nirkabel ergonomis, 2.4 GHz','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(3,'Keyboard Mekanikal','Aksesoris',89.99,'Keyboard mekanikal RGB dengan lampu latar','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(4,'Monitor 4K 27\"','Elektronik',399.99,'Monitor panel IPS 4K ultra-wide','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(5,'USB-C Hub 7-in-1','Aksesoris',45.00,'Hub USB-C 7 port dengan port HDMI & SD','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(6,'SSD 1TB NVMe','Penyimpanan',79.99,'Solid state drive PCIe Gen4 NVMe M.2','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(7,'Webcam HD 1080p','Aksesoris',59.99,'Webcam Full HD dengan mikrofon internal','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(8,'Kabel Ethernet Cat8','Jaringan',9.99,'Kabel ethernet Cat8 shielded panjang 3 meter','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(9,'RAM DDR5 32GB','Komponen',129.99,'Modul memori desktop DDR5-5600','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(10,'Power Bank 20000mAh','Ponsel',49.99,'Power bank portabel pengisian daya cepat','2026-10-29 05:45:31','2026-10-29 05:45:31');
+(1,'Laptop Pro X1','Elektronik',1299.99,'Laptop performa tinggi dengan RAM 32GB','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(2,'Mouse Nirkabel','Aksesoris',29.99,'Mouse nirkabel ergonomis, 2.4 GHz','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(3,'Keyboard Mekanikal','Aksesoris',89.99,'Keyboard mekanikal RGB dengan lampu latar','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(4,'Monitor 4K 27\"','Elektronik',399.99,'Monitor panel IPS 4K ultra-wide','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(5,'USB-C Hub 7-in-1','Aksesoris',45.00,'Hub USB-C 7 port dengan port HDMI & SD','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(6,'SSD 1TB NVMe','Penyimpanan',79.99,'Solid state drive PCIe Gen4 NVMe M.2','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(7,'Webcam HD 1080p','Aksesoris',59.99,'Webcam Full HD dengan mikrofon internal','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(8,'Kabel Ethernet Cat8','Jaringan',9.99,'Kabel ethernet Cat8 shielded panjang 3 meter','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(9,'RAM DDR5 32GB','Komponen',129.99,'Modul memori desktop DDR5-5600','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(10,'Power Bank 20000mAh','Ponsel',49.99,'Power bank portabel pengisian daya cepat','2026-10-29 06:03:46','2026-10-29 06:03:46');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -350,12 +347,12 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
 INSERT INTO `profiles` VALUES
-(1,'alice','Penggemar keamanan siber dan peserta CTF.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(2,'bob','Pengembang Python dan penikmat kopi.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(3,'charlie','Pecinta Linux dan kontributor open-source.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(4,'diana','Insinyur jaringan dengan pengalaman 10 tahun.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(5,'eve','Analis malware dan reverse engineering.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(99,'hidden_admin','Selamat, Anda menemukan profil tersembunyi! Ini hadiah untuk Anda.','admin','FLAG{id0r_p4th_tr4v3rs4l}','2026-10-29 05:45:31','2026-10-29 05:45:31');
+(1,'alice','Penggemar keamanan siber dan peserta CTF.','user',NULL,'2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(2,'bob','Pengembang Python dan penikmat kopi.','user',NULL,'2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(3,'charlie','Pecinta Linux dan kontributor open-source.','user',NULL,'2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(4,'diana','Insinyur jaringan dengan pengalaman 10 tahun.','user',NULL,'2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(5,'eve','Analis malware dan reverse engineering.','user',NULL,'2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(99,'hidden_admin','Selamat, Anda menemukan profil tersembunyi! Ini hadiah untuk Anda.','admin','FLAG{id0r_p4th_tr4v3rs4l}','2026-10-29 06:03:46','2026-10-29 06:03:46');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -386,9 +383,9 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `secrets` WRITE;
 /*!40000 ALTER TABLE `secrets` DISABLE KEYS */;
 INSERT INTO `secrets` VALUES
-(1,'ctf_flag','FLAG{uni0n_s3l3ct_h3r0}','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(2,'db_version','MariaDB 11 Server','2026-10-29 05:45:31','2026-10-29 05:45:31'),
-(3,'admin_note','Ingat selalu untuk membersihkan dan memvalidasi parameter pengguna sebelum rilis ke produksi!','2026-10-29 05:45:31','2026-10-29 05:45:31');
+(1,'ctf_flag','FLAG{uni0n_s3l3ct_h3r0}','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(2,'db_version','MariaDB 11 Server','2026-10-29 06:03:46','2026-10-29 06:03:46'),
+(3,'admin_note','Ingat selalu untuk membersihkan dan memvalidasi parameter pengguna sebelum rilis ke produksi!','2026-10-29 06:03:46','2026-10-29 06:03:46');
 /*!40000 ALTER TABLE `secrets` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -489,7 +486,7 @@ LOCK TABLES `system_settings` WRITE;
 INSERT INTO `system_settings` VALUES
 (1,'active_mode','competition','2026-10-29 05:45:09','2026-10-29 05:45:09'),
 (2,'competition_status','active','2026-10-29 05:45:09','2026-10-29 05:45:09'),
-(3,'broadcast_message','','2026-10-29 05:45:09','2026-10-29 05:46:07');
+(3,'broadcast_message','Selamat datang di Platform Edukasi Keamanan Siber ITEC CyberLab!','2026-10-29 05:45:09','2026-10-29 06:03:46');
 /*!40000 ALTER TABLE `system_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -531,7 +528,7 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES
-(1,'Platform Instructor','admin','admin@cyberlab.local',NULL,'$2y$12$6BXSA9BuGBHw68Ms8G8HduMg7D2HsW8.sCbCQ02IunQeKPh3xKatO','admin',NULL,NULL,NULL,'2026-10-29 05:45:09','2026-10-29 05:45:31');
+(1,'Platform Instructor','admin','admin@cyberlab.local',NULL,'$2y$12$m4IAybEAnzcZbweEYtHZc.1gE9nvJVC64hFGxeeLjHLn.zaEDRYBq','admin',NULL,NULL,NULL,'2026-10-29 05:45:09','2026-10-29 06:03:46');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -546,4 +543,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-10-29 12:49:05
+-- Dump completed on 2026-10-29 13:03:59
