@@ -53,6 +53,7 @@
                     type="text" 
                     id="vuln_username" 
                     name="vuln_username" 
+                    value="{{ request('vuln_username') }}"
                     placeholder="admin' --" 
                     autocomplete="off"
                     style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.8rem; color: var(--text-primary); font-size: 0.9rem; outline: none;"
@@ -65,6 +66,7 @@
                     type="text" 
                     id="vuln_password" 
                     name="vuln_password" 
+                    value="{{ request('vuln_password') }}"
                     placeholder="bebas" 
                     autocomplete="off"
                     style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.65rem 0.8rem; color: var(--text-primary); font-size: 0.9rem; outline: none;"
@@ -81,7 +83,7 @@
             <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem;">
                 Pratinjau Query SQL yang Dieksekusi:
             </div>
-            <pre style="margin: 0; font-size: 0.8rem; color: #60a5fa; white-space: pre-wrap; word-break: break-all;">SELECT * FROM users WHERE username = '<span id="prev_u" style="color: #fbbf24;">...</span>' AND password = '<span id="prev_p" style="color: #fbbf24;">...</span>' LIMIT 1</pre>
+            <pre style="margin: 0; font-size: 0.8rem; color: #60a5fa; white-space: pre-wrap; word-break: break-all;">@if($executedQuery)<span style="color: #60a5fa;">{{ $executedQuery }}</span>@else SELECT * FROM users WHERE username = '<span id="prev_u" style="color: #fbbf24;">...</span>' AND password = '<span id="prev_p" style="color: #fbbf24;">...</span>' LIMIT 1 @endif</pre>
         </div>
 
     </div>
@@ -101,5 +103,6 @@
 
     if (uInput) uInput.addEventListener('input', sync);
     if (pInput) pInput.addEventListener('input', sync);
+    sync();
 </script>
 @endsection

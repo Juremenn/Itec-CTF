@@ -21,7 +21,18 @@ class LabController extends Controller
             $username = $request->input('vuln_username', '');
             $password = $request->input('vuln_password', '');
 
-            $rawSql = "SELECT * FROM users WHERE username = '{$username}' AND password = '{$password}' LIMIT 1";
+            // In MySQL/MariaDB, comment syntax '--' requires a trailing whitespace character.
+            // Ensure any '--' delimiter has a trailing space so MariaDB treats it as a valid comment.
+            $sqlUsername = preg_replace('/--(?!\s)/', '-- ', $username);
+            $sqlPassword = preg_replace('/--(?!\s)/', '-- ', $password);
+
+            $rawSql = "SELECT * FROM users WHERE username = '{$sqlUsername}' AND password = '{$sqlPassword}' LIMIT 1";
+
+            // If a block comment /* was started without closing */, append */ to close comment
+            if (str_contains($rawSql, '/*') && !str_contains($rawSql, '*/')) {
+                $rawSql .= '*/';
+            }
+
             $executedQuery = $rawSql;
 
             try {
