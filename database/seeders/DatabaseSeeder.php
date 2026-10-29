@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         // 3. Seed Realistic Multi-Domain Challenges (All in Bahasa Indonesia)
         $challengesData = [
             [
-                'title'       => 'SQL Injection: Bypass Otentikasi',
+                'title'       => 'SQL Injection - Bypass Otentikasi',
                 'slug'        => 'sqli-login-bypass',
                 'category'    => 'web',
                 'difficulty'  => 'easy',
@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder
                 'is_active'   => true,
             ],
             [
-                'title'       => 'Insecure Direct Object Reference (IDOR): Kebocoran Profil',
+                'title'       => 'Insecure Direct Object Reference (IDOR) - Kebocoran Profil',
                 'slug'        => 'idor-profile-leak',
                 'category'    => 'web',
                 'difficulty'  => 'easy',
@@ -99,7 +99,7 @@ class DatabaseSeeder extends Seeder
                 'is_active'   => true,
             ],
             [
-                'title'       => 'Kelemahan Kriptografi: Analisis Caesar Cipher',
+                'title'       => 'Kelemahan Kriptografi - Analisis Caesar Cipher',
                 'slug'        => 'crypto-caesar-cipher',
                 'category'    => 'crypto',
                 'difficulty'  => 'easy',
