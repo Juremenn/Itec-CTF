@@ -16,16 +16,13 @@
         </div>
     </div>
 
-    <!-- Parameter Navigation Helper -->
-    <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <!-- Parameter Indicator -->
+    <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center;">
         <div style="font-size: 0.85rem; color: var(--text-secondary);">
-            Parameter Saat Ini: <code style="color: var(--accent-orange);">?id={{ $id }}</code>
+            Parameter Query URL: <code style="color: var(--accent-orange); background: var(--bg-base); padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid var(--border-input);">?id={{ $id }}</code>
         </div>
-        <div style="display: flex; gap: 0.4rem;">
-            <a href="{{ route('lab.idor', ['id' => 1]) }}" class="btn-subtle" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">ID 1</a>
-            <a href="{{ route('lab.idor', ['id' => 2]) }}" class="btn-subtle" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">ID 2</a>
-            <a href="{{ route('lab.idor', ['id' => 3]) }}" class="btn-subtle" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">ID 3</a>
-            <a href="{{ route('lab.idor', ['id' => 99]) }}" class="btn-subtle" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; color: #fbbf24;">ID 99</a>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">
+            Ubah nilai <code style="color: var(--text-secondary);">?id=</code> pada URL peramban untuk menguji IDOR
         </div>
     </div>
 
