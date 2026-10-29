@@ -66,6 +66,7 @@
                         'web' => 'Web',
                         'crypto' => 'Kripto',
                         'recon' => 'Pengintaian',
+                        'general' => 'Keahlian Umum',
                         default => $ch->category
                     };
                     $isAdmin = Auth::check() && Auth::user()->isAdmin();

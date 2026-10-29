@@ -21,3 +21,4 @@ return new class extends Migration
         DB::statement("ALTER TABLE challenges MODIFY COLUMN category ENUM('web', 'crypto', 'recon') NOT NULL");
     }
 };
+

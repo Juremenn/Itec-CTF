@@ -69,7 +69,7 @@
                     <ul style="margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
                         <li>Identifikasi parameter yang rentan atau kesalahan konfigurasi pada arsitektur target.</li>
                         <li>Rancang payload eksploitasi untuk mengekstrak token rahasia dari sistem.</li>
-                        <li>Temukan token berformat <code style="color: #4ade80;">FLAG{...}</code> dan kirimkan pada formulir di sebelah kanan.</li>
+                        <li>Temukan token flag yang valid dan kirimkan pada formulir di sebelah kanan.</li>
                     </ul>
                 </div>
             </div>
@@ -263,7 +263,7 @@ chmod +x warm
                             name="flag" 
                             required 
                             autocomplete="off"
-                            placeholder="FLAG{...}"
+                            placeholder="Masukkan token flag yang ditemukan"
                             {{ $isSubmissionLocked ? 'disabled' : '' }}
                             style="width: 100%; box-sizing: border-box; background: var(--bg-base); border: 1px solid var(--border-input); border-radius: 6px; padding: 0.7rem 0.85rem; color: var(--text-primary); font-size: 0.9rem; outline: none; transition: border-color 0.15s ease;"
                             onfocus="this.style.borderColor='var(--accent-orange)'"
