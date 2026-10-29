@@ -111,7 +111,17 @@ class ChallengeController extends Controller
             return back()->with('info', 'Anda sudah menyelesaikan tantangan ini sebelumnya!');
         }
 
-        if (hash_equals($correctFlag, $submittedFlag)) {
+        $isMatch = hash_equals($correctFlag, $submittedFlag);
+        if (!$isMatch && $challenge->slug === 'wave-a-flag') {
+            $inner = 'b1scu1ts_4nd_gr4vy_57d8c79';
+            $isMatch = in_array($submittedFlag, [
+                "academy{{$inner}}",
+                "FLAG{{$inner}}",
+                "picoCTF{{$inner}}",
+            ]);
+        }
+
+        if ($isMatch) {
             // Determine solve mode
             $mode = ($activeMode === 'competition') ? 'competition' : 'training';
 

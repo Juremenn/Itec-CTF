@@ -33,6 +33,9 @@
                 <a href="{{ route('challenges.index', ['category' => 'recon']) }}" class="btn-subtle {{ $selectedCategory === 'recon' ? 'active' : '' }}" style="{{ $selectedCategory === 'recon' ? 'background: var(--surface-elevated); color: var(--text-primary); border-color: #2a3142;' : '' }}; font-size: 0.8rem; padding: 0.35rem 0.75rem;">
                     Pengintaian
                 </a>
+                <a href="{{ route('challenges.index', ['category' => 'general']) }}" class="btn-subtle {{ $selectedCategory === 'general' ? 'active' : '' }}" style="{{ $selectedCategory === 'general' ? 'background: var(--surface-elevated); color: var(--text-primary); border-color: #2a3142;' : '' }}; font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+                    Keahlian Umum
+                </a>
             </div>
         </div>
 
@@ -51,6 +54,7 @@
                     'web' => 'Eksploitasi Web',
                     'crypto' => 'Kriptografi',
                     'recon' => 'Pengintaian',
+                    'general' => 'Keahlian Umum',
                     default => $ch->category
                 };
             @endphp

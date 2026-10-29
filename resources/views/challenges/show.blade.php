@@ -16,6 +16,7 @@
                         'web' => 'Eksploitasi Web',
                         'crypto' => 'Kriptografi',
                         'recon' => 'Pengintaian',
+                        'general' => 'Keahlian Umum (General Skills)',
                         default => $challenge->category
                     } }}
                 </span>
@@ -92,9 +93,7 @@
                         <summary style="font-size: 0.85rem; font-weight: 600; color: #fbbf24; cursor: pointer; user-select: none;">
                             💡 Buka Petunjuk Tantangan
                         </summary>
-                        <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; border-top: 1px solid var(--border-hairline); padding-top: 0.75rem;">
-                            {{ $challenge->hint ?? 'Analisis respon galat server dan perhatikan anomali refleksi query data.' }}
-                        </div>
+                        <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; border-top: 1px solid var(--border-hairline); padding-top: 0.75rem; white-space: pre-line;">{!! nl2br(e($challenge->hint ?? 'Analisis respon galat server dan perhatikan anomali refleksi query data.')) !!}</div>
                     </details>
                 </div>
 
@@ -191,6 +190,26 @@
                             Periksa Kebijakan Robot: /robots.txt {{ $isSubmissionLocked ? '(Pratinjau Admin)' : '' }} &nearr;
                         </a>
                     @endif
+                @elseif($challenge->slug === 'wave-a-flag')
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5;">
+                        Program binary Linux (ELF 64-bit) tersedia untuk diunduh dan dieksekusi di terminal shell Anda.
+                    </p>
+                    
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+                        <a href="{{ route('files.download', 'warm') }}" class="btn-orange" style="padding: 0.6rem 1.25rem; text-decoration: none;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Unduh Binary: warm
+                        </a>
+                    </div>
+
+                    <div style="background: var(--surface-secondary); border: 1px solid var(--border-hairline); border-radius: 6px; padding: 0.85rem 1rem;">
+                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem;">
+                            Perintah Terminal (Wget & Eksekusi Shell):
+                        </div>
+                        <pre style="margin: 0; color: #4ade80; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.8rem; background: var(--bg-base); padding: 0.6rem 0.85rem; border-radius: 4px; line-height: 1.6; overflow-x: auto;">wget {{ url('/files/warm') }}
+chmod +x warm
+./warm -h</pre>
+                    </div>
                 @else
                     <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; line-height: 1.5;">
                         Artefak analisis kriptografi atau pengintaian statis. Tinjau ringkasan operasional di atas untuk memecahkan sandi.

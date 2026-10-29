@@ -30,7 +30,7 @@ class AdminChallengeController extends Controller
         $validated = $request->validate([
             'title'       => ['required', 'string', 'max:255'],
             'slug'        => ['nullable', 'string', 'max:255', 'unique:challenges,slug'],
-            'category'    => ['required', 'in:web,crypto,recon'],
+            'category'    => ['required', 'in:web,crypto,recon,general'],
             'difficulty'  => ['required', 'in:easy,medium,hard'],
             'points'      => ['required', 'integer', 'min:1'],
             'flag'        => ['required', 'string', 'max:255'],
@@ -68,7 +68,7 @@ class AdminChallengeController extends Controller
         $validated = $request->validate([
             'title'       => ['required', 'string', 'max:255'],
             'slug'        => ['required', 'string', 'max:255', 'unique:challenges,slug,' . $challenge->id],
-            'category'    => ['required', 'in:web,crypto,recon'],
+            'category'    => ['required', 'in:web,crypto,recon,general'],
             'difficulty'  => ['required', 'in:easy,medium,hard'],
             'points'      => ['required', 'integer', 'min:1'],
             'flag'        => ['required', 'string', 'max:255'],

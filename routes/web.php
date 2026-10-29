@@ -26,6 +26,19 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/scoreboard', [ScoreboardController::class, 'index'])->name('scoreboard');
 Route::get('/scoreboard/live-data', [ScoreboardController::class, 'liveData'])->name('scoreboard.live_data');
 
+// Challenge Files Download (Public & Wget Accessible)
+Route::get('/files/{filename}', function ($filename) {
+    $cleanFilename = basename($filename);
+    $filePath = public_path('files/' . $cleanFilename);
+    if (!file_exists($filePath)) {
+        $filePath = base_path('challenges/files/' . $cleanFilename);
+    }
+    if (!file_exists($filePath)) {
+        abort(404, 'File tantangan tidak ditemukan.');
+    }
+    return response()->download($filePath, $cleanFilename);
+})->name('files.download');
+
 // Authenticated Participant Portal
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
