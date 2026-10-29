@@ -91,32 +91,16 @@ class ScoreboardController extends Controller
      */
     private function getRankedUsers(string $mode)
     {
-        $isComp = ($mode === 'competition');
-
         $query = User::where('role', '!=', 'admin');
 
-        if ($isComp) {
-            $query->withSum(['solves as total_points' => function ($q) {
-                $q->where('mode', 'competition')
-                    ->join('challenges', 'solves.challenge_id', '=', 'challenges.id')
-                    ->selectRaw('COALESCE(SUM(challenges.points), 0)');
-            }], 'challenges.points')
-            ->withCount(['solves as solved_count' => function ($q) {
-                $q->where('mode', 'competition');
-            }])
-            ->with(['solves' => function ($q) {
-                $q->where('mode', 'competition')->with('challenge')->orderBy('solved_at', 'asc');
-            }]);
-        } else {
-            $query->withSum(['solves as total_points' => function ($q) {
-                $q->join('challenges', 'solves.challenge_id', '=', 'challenges.id')
-                    ->selectRaw('COALESCE(SUM(challenges.points), 0)');
-            }], 'challenges.points')
-            ->withCount('solves as solved_count')
-            ->with(['solves' => function ($q) {
-                $q->with('challenge')->orderBy('solved_at', 'asc');
-            }]);
-        }
+        $query->withSum(['solves as total_points' => function ($q) {
+            $q->join('challenges', 'solves.challenge_id', '=', 'challenges.id')
+                ->selectRaw('COALESCE(SUM(challenges.points), 0)');
+        }], 'challenges.points')
+        ->withCount('solves as solved_count')
+        ->with(['solves' => function ($q) {
+            $q->with('challenge')->orderBy('solved_at', 'asc');
+        }]);
 
         return $query->get()->sortByDesc(function ($user) {
             $lastSolve = $user->solves->last()?->solved_at?->timestamp ?? PHP_INT_MAX;
@@ -142,9 +126,6 @@ class ScoreboardController extends Controller
             $accum = 0;
 
             $solves = $u->solves;
-            if ($mode === 'competition') {
-                $solves = $solves->where('mode', 'competition');
-            }
 
             if ($solves->isNotEmpty()) {
                 $firstTimestamp = ($solves->first()->solved_at->timestamp - 60) * 1000;

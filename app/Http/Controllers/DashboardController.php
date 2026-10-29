@@ -35,12 +35,8 @@ class DashboardController extends Controller
         $solvedChallengeIds = $userSolves->pluck('challenge_id')->toArray();
         $solvedCount = count($solvedChallengeIds);
 
-        // Calculate points based on mode context
-        if ($activeMode === 'competition') {
-            $userPoints = $userSolves->where('mode', 'competition')->sum(fn($s) => $s->challenge?->points ?? 0);
-        } else {
-            $userPoints = $userSolves->sum(fn($s) => $s->challenge?->points ?? 0);
-        }
+        // Calculate total points across all solved challenges
+        $userPoints = $userSolves->sum(fn($s) => $s->challenge?->points ?? 0);
 
         $completionRate = $totalChallenges > 0 ? round(($solvedCount / $totalChallenges) * 100) : 0;
 

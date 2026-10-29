@@ -121,9 +121,8 @@ class ChallengeController extends Controller
             ]);
         }
 
-        if ($isMatch) {
-            // Determine solve mode
-            $mode = ($activeMode === 'competition') ? 'competition' : 'training';
+            // Award all valid solves as competition mode so points always reflect on scoreboards
+            $mode = 'competition';
 
             Solve::create([
                 'user_id'      => $user->id,

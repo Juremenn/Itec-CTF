@@ -226,7 +226,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +245,8 @@ INSERT INTO `migrations` VALUES
 (6,'2024_10_28_000003_create_solves_table',1),
 (7,'2024_10_28_000004_create_vulnerable_labs_tables',1),
 (8,'2024_10_28_000005_add_ip_and_device_to_users_table',2),
-(9,'2024_10_28_000006_add_general_to_challenges_category_enum',2);
+(9,'2024_10_28_000006_add_general_to_challenges_category_enum',2),
+(10,'2024_10_28_000007_sync_all_solves_to_competition_mode',3);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -305,16 +306,16 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
 INSERT INTO `products` VALUES
-(1,'Laptop Pro X1','Elektronik',1299.99,'Laptop performa tinggi dengan RAM 32GB','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(2,'Mouse Nirkabel','Aksesoris',29.99,'Mouse nirkabel ergonomis, 2.4 GHz','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(3,'Keyboard Mekanikal','Aksesoris',89.99,'Keyboard mekanikal RGB dengan lampu latar','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(4,'Monitor 4K 27\"','Elektronik',399.99,'Monitor panel IPS 4K ultra-wide','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(5,'USB-C Hub 7-in-1','Aksesoris',45.00,'Hub USB-C 7 port dengan port HDMI & SD','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(6,'SSD 1TB NVMe','Penyimpanan',79.99,'Solid state drive PCIe Gen4 NVMe M.2','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(7,'Webcam HD 1080p','Aksesoris',59.99,'Webcam Full HD dengan mikrofon internal','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(8,'Kabel Ethernet Cat8','Jaringan',9.99,'Kabel ethernet Cat8 shielded panjang 3 meter','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(9,'RAM DDR5 32GB','Komponen',129.99,'Modul memori desktop DDR5-5600','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(10,'Power Bank 20000mAh','Ponsel',49.99,'Power bank portabel pengisian daya cepat','2026-10-29 06:07:48','2026-10-29 06:07:48');
+(1,'Laptop Pro X1','Elektronik',1299.99,'Laptop performa tinggi dengan RAM 32GB','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(2,'Mouse Nirkabel','Aksesoris',29.99,'Mouse nirkabel ergonomis, 2.4 GHz','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(3,'Keyboard Mekanikal','Aksesoris',89.99,'Keyboard mekanikal RGB dengan lampu latar','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(4,'Monitor 4K 27\"','Elektronik',399.99,'Monitor panel IPS 4K ultra-wide','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(5,'USB-C Hub 7-in-1','Aksesoris',45.00,'Hub USB-C 7 port dengan port HDMI & SD','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(6,'SSD 1TB NVMe','Penyimpanan',79.99,'Solid state drive PCIe Gen4 NVMe M.2','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(7,'Webcam HD 1080p','Aksesoris',59.99,'Webcam Full HD dengan mikrofon internal','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(8,'Kabel Ethernet Cat8','Jaringan',9.99,'Kabel ethernet Cat8 shielded panjang 3 meter','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(9,'RAM DDR5 32GB','Komponen',129.99,'Modul memori desktop DDR5-5600','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(10,'Power Bank 20000mAh','Ponsel',49.99,'Power bank portabel pengisian daya cepat','2026-10-29 06:46:44','2026-10-29 06:46:44');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -347,12 +348,12 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
 INSERT INTO `profiles` VALUES
-(1,'alice','Penggemar keamanan siber dan peserta CTF.','user',NULL,'2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(2,'bob','Pengembang Python dan penikmat kopi.','user',NULL,'2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(3,'charlie','Pecinta Linux dan kontributor open-source.','user',NULL,'2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(4,'diana','Insinyur jaringan dengan pengalaman 10 tahun.','user',NULL,'2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(5,'eve','Analis malware dan reverse engineering.','user',NULL,'2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(99,'hidden_admin','Selamat, Anda menemukan profil tersembunyi! Ini hadiah untuk Anda.','admin','FLAG{id0r_p4th_tr4v3rs4l}','2026-10-29 06:07:48','2026-10-29 06:07:48');
+(1,'alice','Penggemar keamanan siber dan peserta CTF.','user',NULL,'2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(2,'bob','Pengembang Python dan penikmat kopi.','user',NULL,'2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(3,'charlie','Pecinta Linux dan kontributor open-source.','user',NULL,'2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(4,'diana','Insinyur jaringan dengan pengalaman 10 tahun.','user',NULL,'2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(5,'eve','Analis malware dan reverse engineering.','user',NULL,'2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(99,'hidden_admin','Selamat, Anda menemukan profil tersembunyi! Ini hadiah untuk Anda.','admin','FLAG{id0r_p4th_tr4v3rs4l}','2026-10-29 06:46:44','2026-10-29 06:46:44');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -383,9 +384,9 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `secrets` WRITE;
 /*!40000 ALTER TABLE `secrets` DISABLE KEYS */;
 INSERT INTO `secrets` VALUES
-(1,'ctf_flag','FLAG{uni0n_s3l3ct_h3r0}','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(2,'db_version','MariaDB 11 Server','2026-10-29 06:07:48','2026-10-29 06:07:48'),
-(3,'admin_note','Ingat selalu untuk membersihkan dan memvalidasi parameter pengguna sebelum rilis ke produksi!','2026-10-29 06:07:48','2026-10-29 06:07:48');
+(1,'ctf_flag','FLAG{uni0n_s3l3ct_h3r0}','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(2,'db_version','MariaDB 11 Server','2026-10-29 06:46:44','2026-10-29 06:46:44'),
+(3,'admin_note','Ingat selalu untuk membersihkan dan memvalidasi parameter pengguna sebelum rilis ke produksi!','2026-10-29 06:46:44','2026-10-29 06:46:44');
 /*!40000 ALTER TABLE `secrets` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -486,7 +487,7 @@ LOCK TABLES `system_settings` WRITE;
 INSERT INTO `system_settings` VALUES
 (1,'active_mode','competition','2026-10-29 05:45:09','2026-10-29 05:45:09'),
 (2,'competition_status','active','2026-10-29 05:45:09','2026-10-29 05:45:09'),
-(3,'broadcast_message','Selamat datang di Platform Edukasi Keamanan Siber ITEC CyberLab!','2026-10-29 05:45:09','2026-10-29 06:07:47');
+(3,'broadcast_message','','2026-10-29 05:45:09','2026-10-29 06:46:48');
 /*!40000 ALTER TABLE `system_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -528,7 +529,7 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES
-(1,'Platform Instructor','admin','admin@cyberlab.local',NULL,'$2y$12$kp2hO02OjqxnZ897Zu4OROsqLH4dQtDJxF4NUUBE5n3x4WnAkmmNC','admin',NULL,NULL,NULL,'2026-10-29 05:45:09','2026-10-29 06:07:48');
+(1,'Platform Instructor','admin','admin@cyberlab.local',NULL,'$2y$12$vt68tWeK0J4vRsVtTg9Ca.VEOu/EbLd2bCC/QHO7uLxnnCFEdVKK.','admin',NULL,NULL,NULL,'2026-10-29 05:45:09','2026-10-29 06:46:44');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -543,4 +544,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-10-29 13:08:08
+-- Dump completed on 2026-10-29 13:53:11
