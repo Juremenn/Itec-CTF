@@ -20,20 +20,25 @@
             </div>
 
             <!-- Filter Tabs -->
-            <div style="display: flex; gap: 0.4rem; background: var(--surface-card); padding: 0.3rem; border-radius: 8px; border: 1px solid var(--border-hairline);">
-                <a href="{{ route('challenges.index') }}" class="btn-subtle {{ $selectedCategory === 'all' ? 'active' : '' }}" style="{{ $selectedCategory === 'all' ? 'background: var(--surface-elevated); color: var(--text-primary); border-color: #2a3142;' : '' }}; font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+            <div class="segmented-filter-track">
+                <a href="{{ route('challenges.index') }}" class="segmented-filter-btn {{ $selectedCategory === 'all' ? 'active' : '' }}">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     Semua
                 </a>
-                <a href="{{ route('challenges.index', ['category' => 'web']) }}" class="btn-subtle {{ $selectedCategory === 'web' ? 'active' : '' }}" style="{{ $selectedCategory === 'web' ? 'background: var(--surface-elevated); color: var(--text-primary); border-color: #2a3142;' : '' }}; font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+                <a href="{{ route('challenges.index', ['category' => 'web']) }}" class="segmented-filter-btn {{ $selectedCategory === 'web' ? 'active' : '' }}">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
                     Eksploitasi Web
                 </a>
-                <a href="{{ route('challenges.index', ['category' => 'crypto']) }}" class="btn-subtle {{ $selectedCategory === 'crypto' ? 'active' : '' }}" style="{{ $selectedCategory === 'crypto' ? 'background: var(--surface-elevated); color: var(--text-primary); border-color: #2a3142;' : '' }}; font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+                <a href="{{ route('challenges.index', ['category' => 'crypto']) }}" class="segmented-filter-btn {{ $selectedCategory === 'crypto' ? 'active' : '' }}">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                     Kriptografi
                 </a>
-                <a href="{{ route('challenges.index', ['category' => 'recon']) }}" class="btn-subtle {{ $selectedCategory === 'recon' ? 'active' : '' }}" style="{{ $selectedCategory === 'recon' ? 'background: var(--surface-elevated); color: var(--text-primary); border-color: #2a3142;' : '' }}; font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+                <a href="{{ route('challenges.index', ['category' => 'recon']) }}" class="segmented-filter-btn {{ $selectedCategory === 'recon' ? 'active' : '' }}">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
                     Pengintaian
                 </a>
-                <a href="{{ route('challenges.index', ['category' => 'general']) }}" class="btn-subtle {{ $selectedCategory === 'general' ? 'active' : '' }}" style="{{ $selectedCategory === 'general' ? 'background: var(--surface-elevated); color: var(--text-primary); border-color: #2a3142;' : '' }}; font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+                <a href="{{ route('challenges.index', ['category' => 'general']) }}" class="segmented-filter-btn {{ $selectedCategory === 'general' ? 'active' : '' }}">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
                     Keahlian Umum
                 </a>
             </div>

@@ -17,11 +17,13 @@
         </div>
 
         <!-- Mode Tabs -->
-        <div style="display: flex; gap: 0.4rem; background: var(--surface-card); padding: 0.3rem; border-radius: 8px; border: 1px solid var(--border-hairline);">
-            <a href="{{ route('scoreboard', ['tab' => 'competition']) }}" class="btn-subtle" style="{{ $tab === 'competition' ? 'background: var(--surface-elevated); color: #4ade80; border-color: rgba(34, 197, 94, 0.4);' : '' }}; font-size: 0.85rem; padding: 0.45rem 1rem;">
+        <div class="segmented-filter-track">
+            <a href="{{ route('scoreboard', ['tab' => 'competition']) }}" class="segmented-filter-btn {{ $tab === 'competition' ? 'active mode-competition' : '' }}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
                 Papan Kompetisi
             </a>
-            <a href="{{ route('scoreboard', ['tab' => 'practice']) }}" class="btn-subtle" style="{{ $tab === 'practice' ? 'background: var(--surface-elevated); color: #60a5fa; border-color: rgba(59, 130, 246, 0.4);' : '' }}; font-size: 0.85rem; padding: 0.45rem 1rem;">
+            <a href="{{ route('scoreboard', ['tab' => 'practice']) }}" class="segmented-filter-btn {{ $tab === 'practice' ? 'active mode-practice' : '' }}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                 Papan Latihan
             </a>
         </div>

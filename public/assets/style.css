@@ -3653,3 +3653,76 @@ body.light-mode .footer-link:hover {
     color: #ea580c !important;
 }
 
+/* Modern Segmented Filter Track (CyLab SecOps Standard) */
+.segmented-filter-track {
+    display: inline-flex;
+    align-items: center;
+    background: #0b0d13;
+    border: 1px solid #1c2233;
+    border-radius: 6px;
+    padding: 3px;
+    gap: 2px;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.segmented-filter-track::-webkit-scrollbar {
+    display: none;
+}
+
+.segmented-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.38rem 0.85rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #8b949e;
+    text-decoration: none;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.segmented-filter-btn svg {
+    transition: stroke 0.15s ease;
+    flex-shrink: 0;
+}
+
+.segmented-filter-btn:hover {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.segmented-filter-btn.active {
+    background: #171b26;
+    color: #ffffff;
+    font-weight: 600;
+    border-color: #2b364c;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.segmented-filter-btn.active svg {
+    stroke: var(--accent-orange);
+}
+
+.segmented-filter-btn.active.mode-competition {
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.35);
+}
+.segmented-filter-btn.active.mode-competition svg {
+    stroke: #4ade80;
+}
+
+.segmented-filter-btn.active.mode-practice {
+    color: #60a5fa;
+    border-color: rgba(59, 130, 246, 0.35);
+}
+.segmented-filter-btn.active.mode-practice svg {
+    stroke: #60a5fa;
+}
+
