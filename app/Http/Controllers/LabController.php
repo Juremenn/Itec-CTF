@@ -14,6 +14,9 @@ class LabController extends Controller
     public function sqliLogin(Request $request): View
     {
         $message = null;
+        $sqlError = null;
+        $authFailed = false;
+        $authenticatedUser = null;
         $flag = null;
         $executedQuery = null;
 
@@ -38,17 +41,31 @@ class LabController extends Controller
             try {
                 $user = DB::selectOne($rawSql);
                 if ($user) {
+                    $authenticatedUser = $user->username;
                     $message = "Otentikasi berhasil sebagai akun: " . htmlspecialchars($user->username);
                     $flag = 'FLAG{sql1_byp4ss_m4st3r}';
                 } else {
+                    $authFailed = true;
                     $message = 'Otentikasi gagal: Kredensial tidak valid.';
                 }
             } catch (\Throwable $e) {
-                $message = 'Kesalahan Sintaks Database (SQL Exception): ' . htmlspecialchars($e->getMessage());
+                // Extract real raw native MySQL / MariaDB error (strip Laravel and SQLSTATE wrappers)
+                $err = $e->errorInfo[2] ?? null;
+                if (!$err && $e->getPrevious() && isset($e->getPrevious()->errorInfo[2])) {
+                    $err = $e->getPrevious()->errorInfo[2];
+                }
+                if (!$err) {
+                    $msg = $e->getMessage();
+                    $msg = preg_replace('/^SQLSTATE\[\w+\]:\s*[^:]+:\s*\d*\s*/i', '', $msg);
+                    $msg = preg_replace('/\s*\(Connection:.*$/s', '', $msg);
+                    $err = trim($msg);
+                }
+                $sqlError = $err;
+                $message = $sqlError;
             }
         }
 
-        return view('labs.sqli_login', compact('message', 'flag', 'executedQuery'));
+        return view('labs.sqli_login', compact('message', 'sqlError', 'authFailed', 'authenticatedUser', 'flag', 'executedQuery'));
     }
 
     /**
@@ -68,7 +85,17 @@ class LabController extends Controller
             try {
                 $results = DB::select($rawSql);
             } catch (\Throwable $e) {
-                $error = 'Kesalahan Eksekusi SQL: ' . htmlspecialchars($e->getMessage());
+                $err = $e->errorInfo[2] ?? null;
+                if (!$err && $e->getPrevious() && isset($e->getPrevious()->errorInfo[2])) {
+                    $err = $e->getPrevious()->errorInfo[2];
+                }
+                if (!$err) {
+                    $msg = $e->getMessage();
+                    $msg = preg_replace('/^SQLSTATE\[\w+\]:\s*[^:]+:\s*\d*\s*/i', '', $msg);
+                    $msg = preg_replace('/\s*\(Connection:.*$/s', '', $msg);
+                    $err = trim($msg);
+                }
+                $error = $err;
             }
         } else {
             $results = DB::table('products')->limit(5)->get();

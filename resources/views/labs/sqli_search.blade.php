@@ -30,15 +30,13 @@
             </button>
         </form>
 
-        @if($executedQuery)
-        <div style="background: var(--surface-secondary); border: 1px solid var(--border-hairline); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.8rem; color: #60a5fa; word-break: break-all;">
-            <span style="color: var(--text-muted);">SQL yang Dihasilkan:</span> {{ $executedQuery }}
-        </div>
-        @endif
-
         @if($error)
-        <div class="alert-box alert-error">
-            <div>{{ $error }}</div>
+        <div style="margin-bottom: 1.25rem;">
+            <div style="font-size: 0.75rem; color: #f87171; font-weight: 700; text-transform: uppercase; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
+                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #ef4444;"></span>
+                MySQL / MariaDB Database Error:
+            </div>
+            <pre style="margin: 0; background: #07080b; border: 1px solid rgba(239, 68, 68, 0.4); border-left: 4px solid #ef4444; border-radius: 6px; padding: 0.85rem 1.15rem; color: #fca5a5; font-family: 'Consolas', 'Courier New', monospace !important; font-size: 0.825rem; white-space: pre-wrap; word-break: break-all; line-height: 1.5;">{{ $error }}</pre>
         </div>
         @endif
 
