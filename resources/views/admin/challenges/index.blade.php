@@ -20,11 +20,11 @@
         </a>
     </div>
 
-    <!-- Challenges Table -->
-    <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 10px; overflow: hidden;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
+    <!-- Challenges Table (Responsive Touch Scroll on Mobile) -->
+    <div class="table-responsive" style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <table style="width: 100%; min-width: 720px; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
             <thead>
-                <tr style="background: var(--surface-secondary); border-bottom: 1px solid var(--border-hairline); color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">
+                <tr style="background: var(--surface-secondary); border-bottom: 1px solid var(--border-hairline); color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; white-space: nowrap;">
                     <th style="padding: 1rem 1.25rem;">Judul & Slug</th>
                     <th style="padding: 1rem 1.25rem;">Kategori</th>
                     <th style="padding: 1rem 1.25rem; text-align: center;">Tingkat</th>

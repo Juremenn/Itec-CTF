@@ -23,13 +23,20 @@
             </p>
         </div>
 
-        <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
             <a href="{{ route('admin.challenges.create') }}" class="btn-orange">
                 + Tambah Tantangan
             </a>
             <a href="{{ route('admin.challenges.index') }}" class="btn-subtle">
                 Kelola Tantangan
             </a>
+            <form method="POST" action="{{ route('admin.sync_database') }}" style="margin: 0;" onsubmit="return confirm('Jalankan migrasi dan seeder tantangan terbaru ke database?');">
+                @csrf
+                <button type="submit" class="btn-subtle" title="Sinkronkan seeder dan migrasi tantangan terbaru">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    Sinkronkan Seeder
+                </button>
+            </form>
         </div>
     </div>
 

@@ -6,9 +6,9 @@
 <div style="display: flex; flex-direction: column; gap: 2rem;">
 
     <!-- Welcome & Hero Header -->
-    <div style="background: linear-gradient(135deg, var(--surface-card) 0%, #171b26 100%); border: 1px solid var(--border-hairline); border-radius: 12px; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+    <div class="hero-header-box" style="background: linear-gradient(135deg, var(--surface-card) 0%, #171b26 100%); border: 1px solid var(--border-hairline); border-radius: 12px; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
         <div>
-            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
                 <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-orange); text-transform: uppercase; letter-spacing: 0.05em;">Pusat Latihan Keamanan Siber</span>
                 <span style="color: var(--text-muted);">&bull;</span>
                 <span style="font-size: 0.8rem; color: var(--text-secondary);">ID Peserta: #{{ str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</span>
@@ -25,7 +25,7 @@
             </p>
         </div>
 
-        <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <div class="hero-actions-group" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
             <a href="{{ route('challenges.index') }}" class="btn-orange" style="padding: 0.55rem 1.15rem;">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
                 Jelajahi Tantangan &rarr;
@@ -37,8 +37,8 @@
         </div>
     </div>
 
-    <!-- Symmetrical Two-Column Content Grid -->
-    <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 1.75rem; align-items: start;">
+    <!-- Symmetrical Two-Column Content Grid (Responsive on Mobile) -->
+    <div class="responsive-two-col" style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 1.75rem; align-items: start;">
         
         <!-- Left Column: Challenges Overview List -->
         <div>

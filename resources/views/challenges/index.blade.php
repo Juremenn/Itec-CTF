@@ -45,7 +45,7 @@
         </div>
 
         <!-- Challenges Grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.35rem;">
+        <div class="challenges-catalog-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 1.35rem;">
             @forelse($challenges as $ch)
             @php
                 $isSolved = in_array($ch->id, $userSolves);

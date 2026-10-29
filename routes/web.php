@@ -74,5 +74,6 @@ Route::prefix('itec/admin')->middleware(['stealth.admin'])->group(function () {
         Route::post('/broadcast', [AdminController::class, 'setBroadcast'])->name('admin.broadcast');
         Route::resource('challenges', AdminChallengeController::class)->names('admin.challenges');
         Route::post('/reset-scores', [AdminController::class, 'purgeScores'])->name('admin.reset_scores');
+        Route::post('/sync-database', [AdminController::class, 'syncDatabase'])->name('admin.sync_database');
     });
 });

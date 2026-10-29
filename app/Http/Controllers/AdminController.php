@@ -148,4 +148,17 @@ class AdminController extends Controller
 
         return back()->with('success', 'Data papan skor berhasil direset. Akun peserta tetap aman.');
     }
+
+    public function syncDatabase(): RedirectResponse
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'DatabaseSeeder', '--force' => true]);
+            \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+
+            return back()->with('success', 'Migrasi dan seeder tantangan terbaru berhasil disinkronkan ke basis data.');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal menyinkronkan basis data: ' . $e->getMessage());
+        }
+    }
 }

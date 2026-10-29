@@ -77,11 +77,11 @@
         </div>
     </div>
 
-    <!-- Leaderboard Table -->
-    <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 10px; overflow: hidden;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
+    <!-- Leaderboard Table (Responsive Touch Scroll on Mobile) -->
+    <div class="table-responsive" style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <table style="width: 100%; min-width: 580px; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
             <thead>
-                <tr style="background: var(--surface-secondary); border-bottom: 1px solid var(--border-hairline); color: var(--text-muted); font-size: 0.725rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                <tr style="background: var(--surface-secondary); border-bottom: 1px solid var(--border-hairline); color: var(--text-muted); font-size: 0.725rem; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;">
                     <th style="padding: 0.85rem 1.25rem; width: 100px; text-align: center;">Peringkat</th>
                     <th style="padding: 0.85rem 1.25rem;">Peserta</th>
                     <th style="padding: 0.85rem 1.25rem; width: 140px; text-align: center;">Lab Selesai</th>

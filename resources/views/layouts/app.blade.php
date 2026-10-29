@@ -360,6 +360,155 @@
             font-size: 0.8rem;
             background: #090a0f;
         }
+
+        /* Mobile Responsive Navigation & System */
+        .desktop-only {
+            display: flex !important;
+        }
+        .mobile-only {
+            display: none !important;
+        }
+
+        .nav-mobile-toggle {
+            display: none;
+            background: var(--surface-card);
+            border: 1px solid var(--border-hairline);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 0.45rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            line-height: 1;
+        }
+        .nav-mobile-toggle:hover {
+            background: var(--surface-elevated);
+            border-color: var(--border-input);
+        }
+
+        .nav-mobile-drawer {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: rgba(12, 13, 18, 0.98);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-hairline);
+            padding: 1rem 1rem 1.5rem 1rem;
+            z-index: 49;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .nav-mobile-drawer.is-open {
+            display: flex;
+            animation: mobileSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes mobileSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            background: var(--surface-card);
+            border: 1px solid var(--border-hairline);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.15s ease;
+        }
+        .mobile-nav-link:hover {
+            background: var(--surface-elevated);
+            border-color: var(--border-input);
+        }
+        .mobile-nav-link.active {
+            border-color: rgba(249, 115, 22, 0.4);
+            background: rgba(249, 115, 22, 0.1);
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+
+        @media (max-width: 900px) {
+            .responsive-two-col {
+                grid-template-columns: 1fr !important;
+                gap: 1.25rem !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cylab-navbar {
+                height: 60px;
+                padding: 0 1rem;
+            }
+            .desktop-only {
+                display: none !important;
+            }
+            .mobile-only {
+                display: flex !important;
+            }
+            .nav-mobile-toggle {
+                display: inline-flex;
+            }
+            .main-container {
+                padding: 1.25rem 0.85rem 3rem 0.85rem;
+            }
+            .hero-header-box {
+                padding: 1.25rem !important;
+            }
+            .hero-actions-group {
+                width: 100% !important;
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+            }
+            .hero-actions-group a, 
+            .hero-actions-group button {
+                width: 100% !important;
+                justify-content: center !important;
+                box-sizing: border-box !important;
+            }
+            .challenges-catalog-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                width: 100%;
+            }
+            .cylab-footer {
+                padding: 1.25rem 1rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-brand-title {
+                font-size: 0.95rem;
+            }
+            .nav-logo-img {
+                height: 30px;
+            }
+            .segmented-filter-track {
+                width: 100%;
+            }
+        }
     </style>
     @stack('styles')
 </head>
@@ -388,8 +537,8 @@
                 </span>
             </a>
 
-            <!-- Navigation Links -->
-            <nav>
+            <!-- Desktop Navigation Links -->
+            <nav class="desktop-only">
                 <ul class="nav-links">
                     @auth
                     <li>
@@ -425,7 +574,8 @@
             </nav>
         </div>
 
-        <div class="nav-right-actions">
+        <!-- Desktop Right Section -->
+        <div class="nav-right-actions desktop-only">
             @auth
             <!-- User Info & Logout -->
             <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -445,7 +595,65 @@
             <a href="{{ route('login') }}" class="btn-orange">Masuk</a>
             @endauth
         </div>
+
+        <!-- Mobile Hamburger Toggle Button -->
+        <button type="button" class="nav-mobile-toggle mobile-only" id="mobileMenuBtn" aria-label="Buka menu navigasi" onclick="toggleMobileNav()">
+            <svg id="hamburgerIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <svg id="closeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
     </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="nav-mobile-drawer" id="mobileNavDrawer">
+        @auth
+        <div style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.25rem;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary);">{{ Auth::user()->name }}</div>
+            <div style="font-size: 0.725rem; color: var(--text-muted); margin-top: 0.15rem;">{{ '@' . Auth::user()->username }} &bull; {{ Auth::user()->isAdmin() ? 'Administrator' : 'Peserta' }}</div>
+        </div>
+
+        <a href="{{ route('dashboard') }}" class="mobile-nav-link {{ request()->routeIs('dashboard', 'home') ? 'active' : '' }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Dashboard
+        </a>
+        <a href="{{ route('challenges.index') }}" class="mobile-nav-link {{ request()->routeIs('challenges.*') ? 'active' : '' }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+            Tantangan
+        </a>
+        <a href="{{ route('scoreboard') }}" class="mobile-nav-link {{ request()->routeIs('scoreboard*') ? 'active' : '' }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            Papan Skor
+        </a>
+        @if(Auth::user()->isAdmin())
+        <a href="{{ route('admin.index') }}" class="mobile-nav-link {{ request()->is('itec/admin*') ? 'active' : '' }}" style="color: #f97316;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Panel Admin
+        </a>
+        @endif
+
+        <form method="POST" action="{{ route('logout') }}" style="margin-top: 0.5rem;">
+            @csrf
+            <button type="submit" class="btn-subtle" style="width: 100%; justify-content: center; padding: 0.65rem 1rem; box-sizing: border-box;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Keluar Akun
+            </button>
+        </form>
+        @else
+        <a href="{{ route('scoreboard') }}" class="mobile-nav-link {{ request()->routeIs('scoreboard*') ? 'active' : '' }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            Papan Skor
+        </a>
+        <a href="{{ route('login') }}" class="btn-orange" style="justify-content: center; padding: 0.65rem 1rem; margin-top: 0.5rem;">
+            Masuk ke Akun
+        </a>
+        @endauth
+    </div>
 
     <!-- Main Body Area -->
     <main class="main-container">
@@ -481,6 +689,26 @@
         </div>
     </footer>
 
+    <script>
+        function toggleMobileNav() {
+            var drawer = document.getElementById('mobileNavDrawer');
+            var hamburger = document.getElementById('hamburgerIcon');
+            var close = document.getElementById('closeIcon');
+            if (!drawer) return;
+            var isOpen = drawer.classList.toggle('is-open');
+            if (hamburger && close) {
+                hamburger.style.display = isOpen ? 'none' : 'block';
+                close.style.display = isOpen ? 'block' : 'none';
+            }
+        }
+        document.addEventListener('click', function(e) {
+            var drawer = document.getElementById('mobileNavDrawer');
+            var btn = document.getElementById('mobileMenuBtn');
+            if (drawer && drawer.classList.contains('is-open') && !drawer.contains(e.target) && btn && !btn.contains(e.target)) {
+                toggleMobileNav();
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

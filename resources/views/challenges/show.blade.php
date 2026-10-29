@@ -45,8 +45,8 @@
         </div>
     </div>
 
-    <!-- Main Two-Column View -->
-    <div style="display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 1.75rem; align-items: start;">
+    <!-- Main Two-Column View (Responsive on Mobile) -->
+    <div class="responsive-two-col" style="display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 1.75rem; align-items: start;">
         
         <!-- Left Column: Scenario, Vector Analysis & Educational Walkthrough -->
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">

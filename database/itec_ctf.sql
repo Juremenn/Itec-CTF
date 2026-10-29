@@ -1,0 +1,549 @@
+/*M!999999\- enable the sandbox mode */ 
+-- MariaDB dump 10.20-11.8.9-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: itec_ctf
+-- ------------------------------------------------------
+-- Server version	11.8.9-MariaDB-2 from Debian
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
+
+--
+-- Table structure for table `cache`
+--
+
+DROP TABLE IF EXISTS `cache`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cache` (
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
+  `expiration` int(11) NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cache`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `cache` WRITE;
+/*!40000 ALTER TABLE `cache` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cache` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `cache_locks`
+--
+
+DROP TABLE IF EXISTS `cache_locks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cache_locks` (
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `expiration` int(11) NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cache_locks`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `cache_locks` WRITE;
+/*!40000 ALTER TABLE `cache_locks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cache_locks` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `challenges`
+--
+
+DROP TABLE IF EXISTS `challenges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `challenges` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `category` enum('web','crypto','recon','general') NOT NULL,
+  `difficulty` enum('easy','medium','hard') NOT NULL,
+  `points` int(11) NOT NULL DEFAULT 100,
+  `flag` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `hint` text DEFAULT NULL,
+  `remediation` text DEFAULT NULL,
+  `mode_target` enum('competition','training','both') NOT NULL DEFAULT 'both',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `challenges_slug_unique` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `challenges`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `challenges` WRITE;
+/*!40000 ALTER TABLE `challenges` DISABLE KEYS */;
+INSERT INTO `challenges` VALUES
+(1,'SQL Injection: Bypass Otentikasi','sqli-login-bypass','web','easy',100,'FLAG{sql1_byp4ss_m4st3r}','Formulir login target menggabungkan input pengguna secara langsung ke dalam query SQL tanpa parameter prepared statement. Lewati mekanisme otentikasi tanpa kredensial akun yang valid.','Coba batalkan validasi kata sandi menggunakan sintaks komentar SQL: admin\' -- atau \' OR \'1\'=\'1','Gunakan prepared statements dengan query terparameterisasi (seperti PDO prepared statements atau Eloquent ORM) untuk memisahkan struktur query dari input data.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(2,'SQL Injection: Eksfiltrasi Data UNION','sqli-union-exfiltration','web','medium',150,'FLAG{uni0n_s3l3ct_h3r0}','Endpoint pencarian katalog rentan terhadap injeksi UNION SQL. Tentukan jumlah kolom yang dikembalikan query dan lakukan eksfiltrasi data rahasia dari tabel secrets.','Tentukan jumlah kolom query menggunakan klausa ORDER BY atau UNION SELECT null, null, null, null... Kemudian ambil isi dari tabel secrets (id, key, value).','Gunakan query terparameterisasi secara konsisten dan terapkan validasi input yang ketat pada setiap parameter filter pencarian.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(3,'Insecure Direct Object Reference (IDOR): Kebocoran Profil','idor-profile-leak','web','easy',100,'FLAG{id0r_p4th_tr4v3rs4l}','Halaman gateway profil mempercayai parameter identifikasi numerik (ID) yang dikirim pengguna tanpa memverifikasi hak akses otorisasi. Lakukan enumerasi ID untuk menemukan profil administrator yang tersembunyi.','Ubah parameter id pada query URL bilah peramban. Lakukan enumerasi angka atau periksa nilai tinggi seperti ?id=99.','Terapkan pemeriksaan otorisasi di sisi server untuk memvalidasi bahwa pengguna yang mengakses memiliki hak resmi untuk melihat objek data tersebut.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(4,'Reflected Cross-Site Scripting (XSS)','xss-reflected','web','easy',100,'FLAG{xss_r3fl3ct3d_pwn3d}','Parameter pencarian merefleksikan string payload yang tidak disanitasi langsung ke dalam DOM peramban. Suntikkan payload JavaScript untuk mengeksekusi skrip berbahaya sembarang.','Masukkan payload JavaScript seperti <script>alert(1)</script> atau payload error gambar seperti <img src=x onerror=alert(1)>.','Terapkan context-aware HTML entity encoding (seperti htmlspecialchars) pada setiap output dinamis dan terapkan Content Security Policy (CSP) yang ketat.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(5,'Pengungkapan Informasi & Pengintaian Web','info-disclosure-recon','recon','easy',75,'FLAG{h1dd3n_p4n3l_f0und}','Konfigurasi endpoint dan komentar kode pengembang membocorkan rute administratif internal. Telusuri artefak kebijakan pengindeksan perayap web untuk menemukan konsol debug tersembunyi.','Periksa file /robots.txt atau komentar kode sumber HTML untuk menemukan rute direktori rahasia atau portal pemeliharaan.','Jangan mengandalkan konsep obscurity atau robots.txt untuk keamanan. Batasi rute sensitif menggunakan middleware otentikasi dan firewall jaringan.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(6,'Kelemahan Kriptografi: Analisis Caesar Cipher','crypto-caesar-cipher','crypto','easy',100,'FLAG{c43s4r_c1ph3r_cr4ck3d}','Sebuah transmisi data yang berhasil dicegat berisi pesan terenkripsi menggunakan sandi substitusi alfabet: \"SYNT{p43f4e_p1cu3e_pe4px3q}\". Dekripsi sandi tersebut untuk mendapatkan token flag aslinya.','Analisis pergeseran alfabet. Perhatikan bahwa huruf \'S\' bergeser menjadi \'F\' dengan rotasi 13 langkah (ROT13)!','Jangan pernah menggunakan sandi substitusi klasik untuk data sensitif. Gunakan standar enkripsi modern seperti AES-256-GCM atau ChaCha20-Poly1305.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(7,'Pembalikan Hash & Rainbow Table Cracking','crypto-hash-inversion','crypto','medium',150,'FLAG{md5_unc0nd1t10n4l_c0ll1s10n}','Sebuah kebocoran data memperlihatkan hash MD5 tanpa salt: \"b9c3f4e9124be97193259dd1a47313bf\". Pecahkan hash tersebut untuk menemukan kata sandi teks aslinya.','Gunakan basis data lookup tabel pelangi (rainbow table) online atau jalankan pemecah kata sandi dengan kamus kata sandi umum.','Simpan kata sandi menggunakan fungsi hash kriptografi adaptif dan lambat seperti Argon2id atau Bcrypt dengan salt acak yang unik.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(8,'Pengintaian DNS & Subdomain Server','recon-subdomain-discovery','recon','hard',200,'FLAG{subd0m41n_3num3r4t10n_succ3ss}','Periksa metadata header HTTP dan sertifikat TLS SAN (Subject Alternative Names) untuk menemukan server pementasan (staging) internal tim pengembang.','Selidiki log transparansi sertifikat atau header virtual host untuk domain staging.itec.cyberlab.local.','Pastikan server pementasan (staging) berada di jaringan privat terisolasi (VPC internal) tanpa DNS publik atau pencatatan sertifikat publik.','both',1,'2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(9,'Wave a Flag - Eksekusi Binary Bantuan','wave-a-flag','general','easy',100,'FLAG{b1scu1ts_4nd_gr4vy_57d8c79}','Dapatkah Anda memanggil opsi bantuan (help flag) dari sebuah tool atau program biner? Program biner ini menyimpan informasi yang sangat bermanfaat... warm','1. Program ini hanya dapat berjalan di Linux webshell atau komputer berbasis Linux.\n2. Untuk mengunduh file ke shell/terminal Anda, jalankan perintah: wget <URL>, di mana URL dapat ditemukan di bagian detail tantangan.\n3. Jalankan program dengan mengetik: ./warm, namun pastikan Anda telah memberikan izin eksekusi terlebih dahulu menggunakan: chmod +x warm\n4. Argumen -h dan --help adalah parameter paling umum untuk meminta informasi bantuan dari suatu program atau biner!\n5. Tidak semua program mengimplementasikan fitur bantuan seperti -h dan --help.','Saat mengompilasi biner produksi dan perkakas baris perintah, jangan pernah menanamkan (hardcode) flag sensitif, token rahasia, atau kredensial privat ke dalam menu bantuan, string debug, atau seksi data biner.','both',1,'2026-10-29 05:45:31','2026-10-29 05:45:31');
+/*!40000 ALTER TABLE `challenges` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `failed_jobs`
+--
+
+DROP TABLE IF EXISTS `failed_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `failed_jobs`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `failed_jobs` WRITE;
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `job_batches`
+--
+
+DROP TABLE IF EXISTS `job_batches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `job_batches` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `total_jobs` int(11) NOT NULL,
+  `pending_jobs` int(11) NOT NULL,
+  `failed_jobs` int(11) NOT NULL,
+  `failed_job_ids` longtext NOT NULL,
+  `options` mediumtext DEFAULT NULL,
+  `cancelled_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `finished_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `job_batches`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `job_batches` WRITE;
+/*!40000 ALTER TABLE `job_batches` DISABLE KEYS */;
+/*!40000 ALTER TABLE `job_batches` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` tinyint(3) unsigned NOT NULL,
+  `reserved_at` int(10) unsigned DEFAULT NULL,
+  `available_at` int(10) unsigned NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_index` (`queue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jobs`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `jobs` WRITE;
+/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `migrations`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES
+(1,'0001_01_01_000000_create_users_table',1),
+(2,'0001_01_01_000001_create_cache_table',1),
+(3,'0001_01_01_000002_create_jobs_table',1),
+(4,'2024_10_28_000001_create_system_settings_table',1),
+(5,'2024_10_28_000002_create_challenges_table',1),
+(6,'2024_10_28_000003_create_solves_table',1),
+(7,'2024_10_28_000004_create_vulnerable_labs_tables',1),
+(8,'2024_10_28_000005_add_ip_and_device_to_users_table',2),
+(9,'2024_10_28_000006_add_general_to_challenges_category_enum',2);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `password_reset_tokens`
+--
+
+DROP TABLE IF EXISTS `password_reset_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `password_reset_tokens`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `password_reset_tokens` WRITE;
+/*!40000 ALTER TABLE `password_reset_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_reset_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `products` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `products`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES
+(1,'Laptop Pro X1','Elektronik',1299.99,'Laptop performa tinggi dengan RAM 32GB','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(2,'Mouse Nirkabel','Aksesoris',29.99,'Mouse nirkabel ergonomis, 2.4 GHz','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(3,'Keyboard Mekanikal','Aksesoris',89.99,'Keyboard mekanikal RGB dengan lampu latar','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(4,'Monitor 4K 27\"','Elektronik',399.99,'Monitor panel IPS 4K ultra-wide','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(5,'USB-C Hub 7-in-1','Aksesoris',45.00,'Hub USB-C 7 port dengan port HDMI & SD','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(6,'SSD 1TB NVMe','Penyimpanan',79.99,'Solid state drive PCIe Gen4 NVMe M.2','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(7,'Webcam HD 1080p','Aksesoris',59.99,'Webcam Full HD dengan mikrofon internal','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(8,'Kabel Ethernet Cat8','Jaringan',9.99,'Kabel ethernet Cat8 shielded panjang 3 meter','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(9,'RAM DDR5 32GB','Komponen',129.99,'Modul memori desktop DDR5-5600','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(10,'Power Bank 20000mAh','Ponsel',49.99,'Power bank portabel pengisian daya cepat','2026-10-29 05:45:31','2026-10-29 05:45:31');
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `profiles`
+--
+
+DROP TABLE IF EXISTS `profiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `profiles` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `bio` text DEFAULT NULL,
+  `role` varchar(255) NOT NULL DEFAULT 'user',
+  `secret` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `profiles`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `profiles` WRITE;
+/*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
+INSERT INTO `profiles` VALUES
+(1,'alice','Penggemar keamanan siber dan peserta CTF.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(2,'bob','Pengembang Python dan penikmat kopi.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(3,'charlie','Pecinta Linux dan kontributor open-source.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(4,'diana','Insinyur jaringan dengan pengalaman 10 tahun.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(5,'eve','Analis malware dan reverse engineering.','user',NULL,'2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(99,'hidden_admin','Selamat, Anda menemukan profil tersembunyi! Ini hadiah untuk Anda.','admin','FLAG{id0r_p4th_tr4v3rs4l}','2026-10-29 05:45:31','2026-10-29 05:45:31');
+/*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `secrets`
+--
+
+DROP TABLE IF EXISTS `secrets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `secrets` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `secrets`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `secrets` WRITE;
+/*!40000 ALTER TABLE `secrets` DISABLE KEYS */;
+INSERT INTO `secrets` VALUES
+(1,'ctf_flag','FLAG{uni0n_s3l3ct_h3r0}','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(2,'db_version','MariaDB 11 Server','2026-10-29 05:45:31','2026-10-29 05:45:31'),
+(3,'admin_note','Ingat selalu untuk membersihkan dan memvalidasi parameter pengguna sebelum rilis ke produksi!','2026-10-29 05:45:31','2026-10-29 05:45:31');
+/*!40000 ALTER TABLE `secrets` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `sessions`
+--
+
+DROP TABLE IF EXISTS `sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sessions` (
+  `id` varchar(255) NOT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
+  `last_activity` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sessions_user_id_index` (`user_id`),
+  KEY `sessions_last_activity_index` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sessions`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `sessions` WRITE;
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `solves`
+--
+
+DROP TABLE IF EXISTS `solves`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `solves` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `challenge_id` bigint(20) unsigned NOT NULL,
+  `mode` enum('competition','training') NOT NULL,
+  `solved_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `solves_user_id_challenge_id_unique` (`user_id`,`challenge_id`),
+  KEY `solves_challenge_id_foreign` (`challenge_id`),
+  CONSTRAINT `solves_challenge_id_foreign` FOREIGN KEY (`challenge_id`) REFERENCES `challenges` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `solves_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `solves`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `solves` WRITE;
+/*!40000 ALTER TABLE `solves` DISABLE KEYS */;
+/*!40000 ALTER TABLE `solves` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `system_settings`
+--
+
+DROP TABLE IF EXISTS `system_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `system_settings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `value` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `system_settings_key_unique` (`key`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `system_settings`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `system_settings` WRITE;
+/*!40000 ALTER TABLE `system_settings` DISABLE KEYS */;
+INSERT INTO `system_settings` VALUES
+(1,'active_mode','competition','2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(2,'competition_status','active','2026-10-29 05:45:09','2026-10-29 05:45:09'),
+(3,'broadcast_message','','2026-10-29 05:45:09','2026-10-29 05:46:07');
+/*!40000 ALTER TABLE `system_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('participant','admin') NOT NULL DEFAULT 'participant',
+  `registration_ip` varchar(45) DEFAULT NULL,
+  `device_fingerprint` varchar(255) DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_username_unique` (`username`),
+  UNIQUE KEY `users_email_unique` (`email`),
+  KEY `users_registration_ip_index` (`registration_ip`),
+  KEY `users_device_fingerprint_index` (`device_fingerprint`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES
+(1,'Platform Instructor','admin','admin@cyberlab.local',NULL,'$2y$12$6BXSA9BuGBHw68Ms8G8HduMg7D2HsW8.sCbCQ02IunQeKPh3xKatO','admin',NULL,NULL,NULL,'2026-10-29 05:45:09','2026-10-29 05:45:31');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
+
+-- Dump completed on 2026-10-29 12:49:05
