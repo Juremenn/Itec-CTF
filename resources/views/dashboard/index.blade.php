@@ -73,13 +73,13 @@
                 @endphp
 
                 @if($isLocked && !$isAdmin)
-                <div style="display: flex; align-items: center; justify-content: space-between; background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 0.85rem 1.15rem; opacity: 0.65;">
+                <div class="dash-challenge-card is-locked">
                 @else
-                <a href="{{ route('challenges.show', $ch->slug) }}" style="display: flex; align-items: center; justify-content: space-between; background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 0.85rem 1.15rem; text-decoration: none; transition: border-color 0.15s ease;" onmouseover="this.style.borderColor='var(--border-input)'" onmouseout="this.style.borderColor='var(--border-hairline)'">
+                <a href="{{ route('challenges.show', $ch->slug) }}" class="dash-challenge-card">
                 @endif
                     
-                    <div style="display: flex; align-items: center; gap: 0.85rem;">
-                        <div style="width: 32px; height: 32px; border-radius: 6px; background: var(--surface-secondary); display: flex; align-items: center; justify-content: center; color: var(--text-muted); flex-shrink: 0;">
+                    <div class="dash-challenge-card-main">
+                        <div class="dash-challenge-card-icon">
                             @if($solved)
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             @else
@@ -87,11 +87,11 @@
                             @endif
                         </div>
 
-                        <div>
-                            <div style="font-size: 0.875rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.15rem;">
+                        <div class="dash-challenge-card-text">
+                            <div class="dash-challenge-card-title">
                                 {{ $ch->title }}
                             </div>
-                            <div style="display: flex; gap: 0.45rem; align-items: center; font-size: 0.725rem; color: var(--text-muted);">
+                            <div class="dash-challenge-card-meta">
                                 <span style="text-transform: uppercase; font-weight: 600; color: var(--accent-orange);">{{ $catLabel }}</span>
                                 <span>&bull;</span>
                                 <span>Tingkat: {{ $diffLabel }}</span>
@@ -99,12 +99,12 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; gap: 1.25rem;">
-                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); min-width: 75px; text-align: right;">
+                    <div class="dash-challenge-card-side">
+                        <div class="dash-challenge-card-points">
                             {{ $ch->points }} POIN
                         </div>
                         
-                        <div style="min-width: 85px; text-align: right;">
+                        <div class="dash-challenge-card-status">
                             @if($solved)
                             <span style="font-size: 0.75rem; color: #4ade80; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>

@@ -446,6 +446,93 @@
             font-weight: 600;
         }
 
+        /* Dashboard Challenge Cards Responsive Design */
+        .dash-challenge-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface-card);
+            border: 1px solid var(--border-hairline);
+            border-radius: 8px;
+            padding: 0.85rem 1.15rem;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            width: 100%;
+            box-sizing: border-box;
+            gap: 1rem;
+        }
+        .dash-challenge-card:hover {
+            border-color: var(--border-input);
+            background: var(--surface-secondary);
+        }
+        .dash-challenge-card.is-locked {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+        .dash-challenge-card-main {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            flex: 1;
+            min-width: 0;
+        }
+        .dash-challenge-card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: var(--surface-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+        .dash-challenge-card-text {
+            flex: 1;
+            min-width: 0;
+        }
+        .dash-challenge-card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
+            line-height: 1.35;
+            word-break: break-word;
+        }
+        .dash-challenge-card-meta {
+            display: flex;
+            gap: 0.45rem;
+            align-items: center;
+            font-size: 0.725rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        .dash-challenge-card-side {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            flex-shrink: 0;
+        }
+        .dash-challenge-card-points {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            min-width: 75px;
+            text-align: right;
+            white-space: nowrap;
+        }
+        .dash-challenge-card-status {
+            min-width: 85px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+
         @media (max-width: 900px) {
             .responsive-two-col {
                 grid-template-columns: 1fr !important;
@@ -455,8 +542,29 @@
 
         @media (max-width: 768px) {
             .cylab-navbar {
-                height: 60px;
+                height: 58px;
                 padding: 0 1rem;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .nav-brand-group {
+                min-width: 0;
+                flex: 1;
+                overflow: hidden;
+            }
+            .nav-logo-link {
+                min-width: 0;
+                overflow: hidden;
+            }
+            .nav-brand-title {
+                font-size: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .nav-mobile-toggle {
+                flex-shrink: 0;
+                display: inline-flex;
             }
             .desktop-only {
                 display: none !important;
@@ -464,11 +572,11 @@
             .mobile-only {
                 display: flex !important;
             }
-            .nav-mobile-toggle {
-                display: inline-flex;
-            }
             .main-container {
                 padding: 1.25rem 0.85rem 3rem 0.85rem;
+                width: 100%;
+                box-sizing: border-box;
+                overflow-x: hidden;
             }
             .hero-header-box {
                 padding: 1.25rem !important;
@@ -498,15 +606,59 @@
             }
         }
 
+        @media (max-width: 640px) {
+            .dash-challenge-card {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0.85rem 1rem;
+                gap: 0.65rem;
+            }
+            .dash-challenge-card-main {
+                width: 100%;
+            }
+            .dash-challenge-card-side {
+                width: 100%;
+                justify-content: space-between;
+                padding-top: 0.5rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                gap: 0.5rem;
+            }
+            .dash-challenge-card-points {
+                min-width: 0;
+                text-align: left;
+                background: rgba(255, 255, 255, 0.04);
+                padding: 0.15rem 0.5rem;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                color: #fbbf24;
+            }
+            .dash-challenge-card-status {
+                min-width: 0;
+                text-align: right;
+            }
+            .segmented-filter-track {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .segmented-filter-track::-webkit-scrollbar {
+                display: none;
+            }
+            .segmented-filter-btn {
+                flex-shrink: 0;
+                font-size: 0.75rem;
+                padding: 0.35rem 0.65rem;
+            }
+        }
+
         @media (max-width: 480px) {
             .nav-brand-title {
                 font-size: 0.95rem;
             }
             .nav-logo-img {
                 height: 30px;
-            }
-            .segmented-filter-track {
-                width: 100%;
             }
         }
     </style>
