@@ -15,16 +15,16 @@ class ScoreboardController extends Controller
      * Palette of distinct colors for timeline graphs.
      */
     private array $colorPalette = [
-        '#f97316', // Orange
-        '#22c55e', // Emerald
-        '#38bdf8', // Cyan
-        '#eab308', // Amber
-        '#a855f7', // Purple
+        '#f59e0b', // Amber / Orange (Standout primary line)
+        '#38bdf8', // Sky Cyan
+        '#10b981', // Emerald
+        '#818cf8', // Indigo
         '#ec4899', // Pink
-        '#14b8a6', // Teal
-        '#6366f1', // Indigo
-        '#f43f5e', // Rose
         '#94a3b8', // Slate
+        '#14b8a6', // Teal
+        '#a78bfa', // Purple
+        '#fb7185', // Rose
+        '#64748b', // Deep Slate
     ];
 
     public function index(Request $request): View
@@ -118,18 +118,63 @@ class ScoreboardController extends Controller
     {
         $topUsers = $users->filter(fn($u) => ($u->total_points ?? 0) > 0)->take(10)->values();
         
+        if ($topUsers->isEmpty()) {
+            return [
+                'hasRealData' => false,
+                'datasets' => [],
+            ];
+        }
+
+        // 1. Gather all actual solve timestamps to calculate a realistic, uncompressed window
+        $allSolveTimestamps = [];
+        foreach ($topUsers as $u) {
+            foreach ($u->solves as $s) {
+                if ($s->solved_at) {
+                    $allSolveTimestamps[] = $s->solved_at->timestamp;
+                }
+            }
+        }
+
+        if (empty($allSolveTimestamps)) {
+            return [
+                'hasRealData' => false,
+                'datasets' => [],
+            ];
+        }
+
+        $minTime = min($allSolveTimestamps);
+        $maxTime = max($allSolveTimestamps);
+
+        // Dynamic boundaries:
+        // If last solve happened over 2 hours ago, do not stretch graph across idle days (which squashes real activity into a sliver!)
+        // Instead, give 15-30 minutes of breathing room on each side
+        $isLiveRecent = (now()->timestamp - $maxTime) < 3600 && SystemSetting::competitionStatus() === 'active';
+        $startTime = ($minTime - 900) * 1000; // 15 min before first solve
+        $endTime = $isLiveRecent ? (now()->timestamp * 1000) : (($maxTime + 1800) * 1000); // 30 min after last solve
+
+        if ($endTime <= $startTime) {
+            $endTime = $startTime + (1800 * 1000);
+        }
+
         $datasets = [];
 
         foreach ($topUsers as $index => $u) {
             $color = $this->colorPalette[$index % count($this->colorPalette)];
             $points = [];
+            $pointRadii = [];
+            $pointHoverRadii = [];
             $accum = 0;
 
             $solves = $u->solves;
 
             if ($solves->isNotEmpty()) {
-                $firstTimestamp = ($solves->first()->solved_at->timestamp - 60) * 1000;
-                $points[] = ['x' => $firstTimestamp, 'y' => 0];
+                // Baseline origin point (radius 0 so it stays clean at the wall)
+                $points[] = [
+                    'x' => $startTime,
+                    'y' => 0,
+                ];
+                $pointRadii[] = 0;
+                $pointHoverRadii[] = 0;
 
                 foreach ($solves as $s) {
                     $accum += ($s->challenge?->points ?? 0);
@@ -137,13 +182,20 @@ class ScoreboardController extends Controller
                         'x' => $s->solved_at->timestamp * 1000,
                         'y' => $accum,
                     ];
+                    $pointRadii[] = 4.5;
+                    $pointHoverRadii[] = 7;
                 }
 
-                // Current plateau
+                // Final plateau at timeline boundary (radius 0 so it finishes cleanly)
                 $points[] = [
-                    'x' => now()->timestamp * 1000,
+                    'x' => $endTime,
                     'y' => $accum,
                 ];
+                $pointRadii[] = 0;
+                $pointHoverRadii[] = 0;
+
+                // Curated visibility: Top 5 visible by default to eliminate spaghetti overlap
+                $isVisible = ($index < 5);
 
                 $datasets[] = [
                     'label' => $u->name,
@@ -153,15 +205,14 @@ class ScoreboardController extends Controller
                     'borderColor' => $color,
                     'backgroundColor' => $color,
                     'data' => $points,
-                    'stepped' => 'after',
-                    'tension' => 0,
-                    'fill' => false,
-                    'borderWidth' => 2.2,
-                    'pointRadius' => 2.5,
-                    'pointHoverRadius' => 6,
-                    'pointBackgroundColor' => $color,
-                    'pointBorderColor' => '#0c0e14',
-                    'pointBorderWidth' => 1.5,
+                    'hidden' => !$isVisible,
+                    'tension' => 0.35,
+                    'borderWidth' => ($index === 0) ? 3 : 2.2,
+                    'pointRadius' => $pointRadii,
+                    'pointHoverRadius' => $pointHoverRadii,
+                    'pointBackgroundColor' => '#0c0e14',
+                    'pointBorderColor' => $color,
+                    'pointBorderWidth' => 2.5,
                 ];
             }
         }
@@ -169,6 +220,10 @@ class ScoreboardController extends Controller
         return [
             'hasRealData' => !empty($datasets),
             'datasets' => $datasets,
+            'timeBounds' => [
+                'min' => $startTime,
+                'max' => $endTime,
+            ],
         ];
     }
 }

@@ -32,8 +32,8 @@
         $datasets = $chartData['datasets'] ?? [];
     @endphp
 
-    <!-- Professional CTF Score Timeline Card (Stair-Step Graph & Interactive Cadets) -->
-    <div style="background: #11141c; border: 1px solid #1c2230; border-radius: 8px; padding: 1.35rem 1.5rem; display: flex; flex-direction: column; gap: 1.15rem;">
+    <!-- Professional CTF Score Timeline Card (Smooth Spline Interpolation & Ring Node Milestones) -->
+    <div style="background: #11141c; border: 1px solid #1c2230; border-radius: 12px; padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 1.25rem;">
         
         <!-- Timeline Header Strip -->
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
@@ -46,30 +46,39 @@
                 </span>
             </div>
 
-            <div style="font-size: 0.775rem; font-family: 'JetBrains Mono', monospace; color: #64748b;">
-                {{ count($datasets) }} Peserta di Grafik
+            <!-- View Segmented Controller (Top 3 / Top 5 / Semua) -->
+            <div style="display: flex; align-items: center; gap: 0.25rem; background: #090b10; border: 1px solid #1e2538; border-radius: 6px; padding: 3px;">
+                <button type="button" class="ctf-view-btn" data-view="3" style="background: transparent; border: none; color: #94a3b8; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 4px; cursor: pointer; transition: all 0.15s ease;">
+                    Top 3
+                </button>
+                <button type="button" class="ctf-view-btn active" data-view="5" style="background: #1e2538; border: none; color: #f8fafc; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 4px; cursor: pointer; transition: all 0.15s ease;">
+                    Top 5
+                </button>
+                <button type="button" class="ctf-view-btn" data-view="all" style="background: transparent; border: none; color: #94a3b8; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 4px; cursor: pointer; transition: all 0.15s ease;">
+                    Semua
+                </button>
             </div>
         </div>
 
-        <!-- Interactive Top Solvers Filter Chips (Clickable to toggle dataset on chart) -->
-        <div id="chartLegendChips" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; {{ $hasRealData ? '' : 'display: none;' }}">
+        <!-- Elegant Minimalist Cadets Legend Strip (No bulky AI-slop buttons) -->
+        <div id="chartLegendChips" style="display: flex; align-items: center; gap: 0.75rem 1.5rem; flex-wrap: wrap; {{ $hasRealData ? '' : 'display: none;' }}; padding-bottom: 0.15rem;">
             @foreach($datasets as $idx => $ds)
-            <button type="button" 
-                    class="ctf-legend-chip active" 
-                    data-dataset-index="{{ $idx }}" 
-                    style="background: #0d1017; border: 1px solid #1e2538; border-radius: 5px; padding: 0.35rem 0.65rem; display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.75rem; color: #cbd5e1; cursor: pointer; transition: all 0.15s ease;">
-                <span style="width: 8px; height: 8px; border-radius: 2px; background: {{ $ds['borderColor'] }}; flex-shrink: 0;"></span>
-                <span style="font-weight: 600; color: #f8fafc;">#{{ $ds['rank'] ?? ($idx + 1) }} {{ $ds['label'] }}</span>
-                <span style="font-family: 'JetBrains Mono', monospace; color: #64748b; font-size: 0.7rem;">{{ $ds['totalPoints'] ?? 0 }} PTS</span>
-            </button>
+            @php $isInitialVisible = $idx < 5; @endphp
+            <div class="ctf-cadet-legend-item {{ $isInitialVisible ? '' : 'dimmed' }}" 
+                 data-dataset-index="{{ $idx }}" 
+                 style="display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; user-select: none; transition: all 0.15s ease;">
+                <span style="width: 14px; height: 3px; border-radius: 2px; background: {{ $ds['borderColor'] }}; flex-shrink: 0;"></span>
+                <span style="font-size: 0.8rem; font-weight: 600; color: #f8fafc;">#{{ $ds['rank'] ?? ($idx + 1) }} {{ $ds['label'] }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; color: #64748b; font-size: 0.725rem;">{{ $ds['totalPoints'] ?? 0 }} PTS</span>
+            </div>
             @endforeach
         </div>
 
         <!-- Chart Canvas Container -->
-        <div style="position: relative; width: 100%; min-height: 290px; background: #0c0e14; border: 1px solid #1a202c; border-radius: 6px; padding: 1rem 0.85rem;">
-            <canvas id="scoreboardChart" style="width: 100%; height: 290px; {{ $hasRealData ? '' : 'display: none;' }}"></canvas>
+        <div style="position: relative; width: 100%; min-height: 340px; background: #0c0e14; border: 1px solid #1a202c; border-radius: 8px; padding: 1.15rem 1rem;">
+            <canvas id="scoreboardChart" style="width: 100%; height: 340px; {{ $hasRealData ? '' : 'display: none;' }}"></canvas>
             
-            <div id="chartEmptyPlaceholder" style="{{ $hasRealData ? 'display: none;' : 'display: flex;' }} min-height: 270px; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+            <div id="chartEmptyPlaceholder" style="{{ $hasRealData ? 'display: none;' : 'display: flex;' }} min-height: 310px; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
                 <div style="max-width: 380px;">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="1.75" style="margin-bottom: 0.65rem;">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -181,12 +190,23 @@
 .leaderboard-row:hover {
     background: #141824;
 }
-.ctf-legend-chip:hover {
-    border-color: #384258 !important;
-    background: #141824 !important;
+.ctf-cadet-legend-item {
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
 }
-.ctf-legend-chip.dimmed {
-    opacity: 0.35;
+.ctf-cadet-legend-item:hover {
+    transform: translateY(-1px);
+}
+.ctf-cadet-legend-item.dimmed {
+    opacity: 0.3 !important;
+}
+.ctf-view-btn.active {
+    background: #1e2538 !important;
+    color: #f8fafc !important;
+}
+.ctf-view-btn:hover:not(.active) {
+    color: #f8fafc !important;
 }
 </style>
 
@@ -197,6 +217,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const activeTab = '{{ $tab }}';
     const initialChartData = @json($datasets);
+    const timeBounds = @json($chartData['timeBounds'] ?? null);
     const canvas = document.getElementById('scoreboardChart');
     const placeholder = document.getElementById('chartEmptyPlaceholder');
     const chipsContainer = document.getElementById('chartLegendChips');
@@ -214,8 +235,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 maintainAspectRatio: false,
                 elements: {
                     line: {
-                        stepped: 'after',
-                        tension: 0
+                        tension: 0.35,
+                        stepped: false
+                    },
+                    point: {
+                        radius: 4.5,
+                        hoverRadius: 7,
+                        borderWidth: 2.5
                     }
                 },
                 interaction: {
@@ -225,26 +251,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 plugins: {
                     legend: {
-                        display: false // Using custom interactive SecOps chips
+                        display: false
                     },
                     tooltip: {
-                        backgroundColor: '#0c0e14',
+                        backgroundColor: '#11141f',
                         titleColor: '#f8fafc',
                         bodyColor: '#cbd5e1',
-                        borderColor: '#1e2538',
+                        borderColor: '#262f47',
                         borderWidth: 1,
-                        padding: 10,
-                        cornerRadius: 6,
+                        padding: 12,
+                        cornerRadius: 8,
+                        boxPadding: 4,
+                        usePointStyle: true,
                         titleFont: { family: "'Inter', sans-serif", size: 12, weight: '600' },
                         bodyFont: { family: "'JetBrains Mono', monospace", size: 11 },
+                        filter: function(item) {
+                            if (Array.isArray(item.dataset.pointRadius)) {
+                                return (item.dataset.pointRadius[item.dataIndex] || 0) > 0;
+                            }
+                            return true;
+                        },
                         callbacks: {
                             title: function(items) {
                                 if (!items.length) return '';
                                 const d = new Date(items[0].raw.x);
-                                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' (' + d.toLocaleDateString() + ')';
+                                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' · ' + d.toLocaleDateString([], { month: 'short', day: 'numeric' });
                             },
                             label: function(item) {
-                                return ` ${item.dataset.label}: ${item.raw.y} PTS`;
+                                return ` ${item.dataset.label} (#${item.dataset.rank}): ${item.raw.y} PTS`;
                             }
                         }
                     }
@@ -252,13 +286,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 scales: {
                     x: {
                         type: 'linear',
+                        min: timeBounds ? timeBounds.min : undefined,
+                        max: timeBounds ? timeBounds.max : undefined,
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.03)',
-                            borderColor: '#1e2538'
+                            display: false
+                        },
+                        border: {
+                            color: '#1e2538'
                         },
                         ticks: {
                             color: '#64748b',
                             font: { family: "'JetBrains Mono', monospace", size: 10 },
+                            maxTicksLimit: 7,
                             callback: function(val) {
                                 const d = new Date(val);
                                 return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -269,11 +308,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         beginAtZero: true,
                         grid: {
                             color: 'rgba(255, 255, 255, 0.04)',
-                            borderColor: '#1e2538'
+                            borderDash: [3, 3]
+                        },
+                        border: {
+                            display: false
                         },
                         ticks: {
                             color: '#64748b',
                             font: { family: "'JetBrains Mono', monospace", size: 10 },
+                            padding: 10,
                             callback: function(val) { return val + ' PTS'; }
                         }
                     }
@@ -281,12 +324,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Setup interactive chip toggles
         setupChipToggles();
+        setupViewFilters();
     }
 
     function setupChipToggles() {
-        const chips = document.querySelectorAll('.ctf-legend-chip');
+        const chips = document.querySelectorAll('.ctf-cadet-legend-item');
         chips.forEach(chip => {
             chip.addEventListener('click', function () {
                 const idx = parseInt(this.getAttribute('data-dataset-index'), 10);
@@ -305,6 +348,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function setupViewFilters() {
+        const filterBtns = document.querySelectorAll('.ctf-view-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const view = this.getAttribute('data-view');
+                if (!chartInstance) return;
+
+                const limit = (view === '3') ? 3 : ((view === '5') ? 5 : 999);
+
+                chartInstance.data.datasets.forEach((ds, idx) => {
+                    const shouldShow = (idx < limit);
+                    chartInstance.setDatasetVisibility(idx, shouldShow);
+                    
+                    const chip = document.querySelector(`.ctf-cadet-legend-item[data-dataset-index="${idx}"]`);
+                    if (chip) {
+                        if (shouldShow) chip.classList.remove('dimmed');
+                        else chip.classList.add('dimmed');
+                    }
+                });
+                chartInstance.update();
+            });
+        });
+    }
+
     // Silent background real-time updates (every 25 seconds)
     function fetchLiveData() {
         fetch(`{{ route('scoreboard.live_data') }}?tab=${activeTab}`)
@@ -315,6 +384,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (chartInstance && data.chart) {
                         const hasData = data.chart.hasRealData;
                         chartInstance.data.datasets = data.chart.datasets || [];
+                        if (data.chart.timeBounds) {
+                            chartInstance.options.scales.x.min = data.chart.timeBounds.min;
+                            chartInstance.options.scales.x.max = data.chart.timeBounds.max;
+                        }
                         chartInstance.update();
 
                         if (hasData) {
