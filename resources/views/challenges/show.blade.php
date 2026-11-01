@@ -26,21 +26,13 @@
             </h1>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-            @php
-                $diffBadge = match($challenge->difficulty) {
-                    'easy'   => ['bg' => '#14532d', 'color' => '#4ade80', 'border' => 'rgba(74, 222, 128, 0.3)', 'text' => 'Mudah'],
-                    'medium' => ['bg' => '#78350f', 'color' => '#fbbf24', 'border' => 'rgba(251, 191, 36, 0.3)', 'text' => 'Sedang'],
-                    'hard'   => ['bg' => '#7f1d1d', 'color' => '#f87171', 'border' => 'rgba(248, 113, 113, 0.3)', 'text' => 'Sulit'],
-                    default  => ['bg' => '#1e232e', 'color' => '#94a3b8', 'border' => 'rgba(148, 163, 184, 0.3)', 'text' => $challenge->difficulty],
-                };
-            @endphp
-            <span style="font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 4px; background: {{ $diffBadge['bg'] }}; color: {{ $diffBadge['color'] }}; border: 1px solid {{ $diffBadge['border'] }};">
-                {{ $diffBadge['text'] }}
+        <div style="display: flex; align-items: baseline; gap: 0.65rem;">
+            <span style="font-size: 0.825rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); font-weight: 600;">
+                TARGET #{{ str_pad($challenge->id, 2, '0', STR_PAD_LEFT) }}
             </span>
-
-            <span style="font-size: 1.1rem; font-weight: 800; color: #fbbf24; background: var(--surface-card); padding: 0.25rem 0.75rem; border-radius: 4px; border: 1px solid var(--border-hairline);">
-                {{ $challenge->points }} POIN
+            <span style="color: var(--border-hairline);">&bull;</span>
+            <span style="font-size: 1.1rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #fbbf24;">
+                {{ $challenge->points }} PTS
             </span>
         </div>
     </div>
@@ -82,7 +74,7 @@
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                         Panduan Mode Latihan
                     </h3>
-                    <span style="font-size: 0.7rem; font-weight: 600; background: rgba(59, 130, 246, 0.15); color: #60a5fa; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                    <span style="font-size: 0.8rem; font-weight: 600; color: #60a5fa;">
                         Pembelajaran Interaktif
                     </span>
                 </div>
@@ -90,8 +82,9 @@
                 <!-- Hint Section -->
                 <div style="margin-bottom: 1rem;">
                     <details style="background: var(--surface-secondary); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 0.85rem 1rem;">
-                        <summary style="font-size: 0.85rem; font-weight: 600; color: #fbbf24; cursor: pointer; user-select: none;">
-                            💡 Buka Petunjuk Tantangan
+                        <summary style="font-size: 0.85rem; font-weight: 600; color: #fbbf24; cursor: pointer; user-select: none; display: flex; align-items: center; gap: 0.45rem;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                            <span>Buka Petunjuk Tantangan</span>
                         </summary>
                         <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; border-top: 1px solid var(--border-hairline); padding-top: 0.75rem; white-space: pre-line;">{!! nl2br(e($challenge->hint ?? 'Analisis respon galat server dan perhatikan anomali refleksi query data.')) !!}</div>
                     </details>
@@ -100,11 +93,12 @@
                 <!-- Remediation Walkthrough -->
                 <div>
                     <details style="background: var(--surface-secondary); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 0.85rem 1rem;">
-                        <summary style="font-size: 0.85rem; font-weight: 600; color: #4ade80; cursor: pointer; user-select: none;">
-                            🛡️ Panduan Pertahanan & Remedi Keamanan
+                        <summary style="font-size: 0.85rem; font-weight: 600; color: #4ade80; cursor: pointer; user-select: none; display: flex; align-items: center; gap: 0.45rem;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            <span>Panduan Pertahanan dan Remedi Keamanan</span>
                         </summary>
                         <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; border-top: 1px solid var(--border-hairline); padding-top: 0.75rem;">
-                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">Praktik Keamanan Terbaik:</div>
+                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">Praktik Keamanan Terbaik</div>
                             {{ $challenge->remediation ?? 'Pastikan seluruh input divalidasi dan query database menggunakan parameterized prepared statements.' }}
                         </div>
                     </details>

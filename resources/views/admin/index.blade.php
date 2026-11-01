@@ -49,8 +49,7 @@
                 <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem;">
                     Mode Operasional Platform
                 </div>
-                <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: {{ $activeMode === 'competition' ? '#f97316' : '#3b82f6' }};"></span>
+                <div style="font-size: 1.25rem; font-weight: 700; color: {{ $activeMode === 'competition' ? 'var(--accent-orange)' : '#60a5fa' }}; margin-bottom: 0.75rem;">
                     {{ $activeMode === 'competition' ? 'Mode Kompetisi Aktif' : 'Mode Latihan Aktif' }}
                 </div>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.4;">
@@ -77,14 +76,13 @@
                 <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem;">
                     Status Gerbang Kompetisi
                 </div>
-                <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: {{ $competitionStatus === 'active' ? '#22c55e' : '#ef4444' }};"></span>
-                    Status: {{ match($competitionStatus) {
-                        'active' => 'AKTIF',
-                        'paused' => 'DIJEDA',
-                        'upcoming' => 'AKAN DATANG',
-                        'ended' => 'SELESAI',
-                        default => strtoupper($competitionStatus)
+                <div style="font-size: 1.25rem; font-weight: 700; color: {{ $competitionStatus === 'active' ? '#22c55e' : '#ef4444' }}; margin-bottom: 0.75rem;">
+                    {{ match($competitionStatus) {
+                        'active' => 'Status Aktif',
+                        'paused' => 'Status Dijeda',
+                        'upcoming' => 'Status Belum Dimulai',
+                        'ended' => 'Status Telah Selesai',
+                        default => 'Status ' . ucfirst($competitionStatus)
                     } }}
                 </div>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.4;">

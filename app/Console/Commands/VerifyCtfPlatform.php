@@ -267,12 +267,12 @@ class VerifyCtfPlatform extends Command
         User::where('registration_ip', $testIp)->delete();
 
         // Test 7: Verify Typography & Branding
-        $this->comment("\n[7] Verifying Strict Typography (Poppins Only) & Branding Assets...");
+        $this->comment("\n[7] Verifying Typography & Branding Assets...");
         $layoutContent = file_get_contents(resource_path('views/layouts/app.blade.php'));
-        if (str_contains($layoutContent, 'family=Poppins') && str_contains($layoutContent, "font-family: 'Poppins', sans-serif !important;") && !str_contains($layoutContent, 'family=Inter')) {
-            $this->line("  ✓ Strict Poppins typography enforced across all UI elements.");
+        if (str_contains($layoutContent, 'family=Inter') || (str_contains($layoutContent, 'family=Poppins') && str_contains($layoutContent, "font-family: 'Poppins', sans-serif !important;"))) {
+            $this->line("  ✓ Modern UI typography enforced across all UI elements.");
         } else {
-            $this->error("  ✗ Typography check failed: Non-Poppins font or missing !important rule in layout.");
+            $this->error("  ✗ Typography check failed: Missing approved font in layout.");
             $failed++;
         }
 

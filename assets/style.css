@@ -4,19 +4,19 @@
    Color Scheme: Obsidian Pitch Base (#0c0d12) & Warm Amber/Orange Accent (#ea580c / #f97316)
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* ── Design Tokens ─────────────────────────────────────────────────────────── */
 :root {
     /* Obsidian Canvas & Panels */
-    --bg-base:             #0c0d12;
-    --surface-card:        #13151c;
-    --surface-secondary:   #171a23;
-    --surface-elevated:    #1b1e2a;
-    --surface-input:       #090a0f;
-    --border-hairline:     #1f232e;
-    --border-card-hover:   #2a3142;
-    --border-input:        #272d3b;
+    --bg-base:             #090a0f;
+    --surface-card:        #11141f;
+    --surface-secondary:   #161b29;
+    --surface-elevated:    #1c2336;
+    --surface-input:       #0d1017;
+    --border-hairline:     #1e2538;
+    --border-card-hover:   #2d374d;
+    --border-input:        #262f47;
     --border-input-focus:  #f97316;
     --focus-ring:          rgba(249, 115, 22, 0.2);
 
@@ -50,8 +50,8 @@
     --status-paused:       #ef4444;
 
     /* Typography */
-    --font-ui:             'Poppins', sans-serif;
-    --font-mono:           'Poppins', sans-serif;
+    --font-ui:             'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono:           'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
     /* Layout & Geometry */
     --navbar-height:       68px;

@@ -71,6 +71,21 @@ class DashboardController extends Controller
             ->limit(7)
             ->get();
 
+        // Next actionable target for the user
+        $nextChallenge = $challenges->first(fn($c) => !in_array($c->id, $solvedChallengeIds))
+            ?? $challenges->first();
+
+        // Dynamic time-of-day greeting and localized date
+        $now = now();
+        $dateString = $now->translatedFormat('l, j M');
+        $hour = (int)$now->format('H');
+        $greeting = match(true) {
+            $hour >= 4 && $hour < 11 => 'Selamat pagi',
+            $hour >= 11 && $hour < 15 => 'Selamat siang',
+            $hour >= 15 && $hour < 18 => 'Selamat sore',
+            default => 'Selamat malam',
+        };
+
         return view('dashboard.index', compact(
             'user',
             'challenges',
@@ -82,6 +97,9 @@ class DashboardController extends Controller
             'completionRate',
             'categories',
             'recentSolves',
+            'nextChallenge',
+            'dateString',
+            'greeting',
             'activeMode',
             'competitionStatus',
             'broadcast'

@@ -147,13 +147,21 @@ class ScoreboardController extends Controller
 
                 $datasets[] = [
                     'label' => $u->name,
+                    'username' => $u->username,
+                    'rank' => $index + 1,
+                    'totalPoints' => (int) $accum,
                     'borderColor' => $color,
                     'backgroundColor' => $color,
                     'data' => $points,
-                    'tension' => 0.2,
-                    'borderWidth' => 2,
-                    'pointRadius' => 3,
-                    'pointHoverRadius' => 5,
+                    'stepped' => 'after',
+                    'tension' => 0,
+                    'fill' => false,
+                    'borderWidth' => 2.2,
+                    'pointRadius' => 2.5,
+                    'pointHoverRadius' => 6,
+                    'pointBackgroundColor' => $color,
+                    'pointBorderColor' => '#0c0e14',
+                    'pointBorderWidth' => 1.5,
                 ];
             }
         }

@@ -6,31 +6,46 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'CyberLab') &bull; ITEC CyberLab</title>
     
-    <!-- Fonts: Strictly Poppins -->
+    <!-- ITEC Brand Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('assets/img/logoitec.jpg') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    
+    <!-- Modern SecOps Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
 
     <style>
         :root {
-            --bg-base: #0c0d12;
-            --surface-card: #13151c;
-            --surface-secondary: #171a23;
-            --surface-elevated: #1b1e2a;
-            --border-hairline: #1f232e;
-            --border-input: #272d3b;
+            --bg-base: #090a0f;
+            --surface-card: #11141f;
+            --surface-secondary: #161b29;
+            --surface-elevated: #1c2336;
+            --border-hairline: #1e2538;
+            --border-card-hover: #2d374d;
+            --border-input: #262f47;
             --accent-orange: #f97316;
             --accent-orange-hover: #ea580c;
+            --accent-emerald: #10b981;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
         }
 
-        *, *::before, *::after, html, body, input, button, select, textarea, pre, code, kbd, samp {
-            font-family: 'Poppins', sans-serif !important;
+        *, *::before, *::after, html, body, input, button, select, textarea {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+            letter-spacing: -0.011em;
+        }
+
+        pre, code, kbd, samp {
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+            letter-spacing: 0;
         }
 
         body {
@@ -603,6 +618,23 @@
             .cylab-footer {
                 padding: 1.25rem 1rem;
                 font-size: 0.75rem;
+            }
+        .target-stream-row:hover {
+            background-color: var(--surface-secondary) !important;
+        }
+
+        @media (max-width: 820px) {
+            .target-stream-row {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 0.85rem !important;
+                padding: 1rem !important;
+            }
+            .target-stream-side {
+                width: 100% !important;
+                justify-content: space-between !important;
+                border-top: 1px solid var(--border-hairline) !important;
+                padding-top: 0.65rem !important;
             }
         }
 

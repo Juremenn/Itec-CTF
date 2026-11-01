@@ -19,7 +19,7 @@ class ChallengeController extends Controller
         $competitionStatus = SystemSetting::competitionStatus();
         $selectedCategory = $request->query('category', 'all');
 
-        $query = Challenge::where('is_active', true);
+        $query = Challenge::where('is_active', true)->withCount('solves');
 
         if ($activeMode === 'competition') {
             $query->whereIn('mode_target', ['competition', 'both']);
@@ -32,7 +32,8 @@ class ChallengeController extends Controller
         $challenges = $query->orderBy('category')->orderBy('points')->get();
         $userSolves = Solve::where('user_id', $user->id)->pluck('challenge_id')->toArray();
 
-        $isLocked = ($competitionStatus !== 'active');
+        $isAdmin = $user && $user->isAdmin();
+        $isLocked = ($competitionStatus !== 'active') && !$isAdmin;
         $lockMessage = match ($competitionStatus) {
             'paused'   => 'Sesi kompetisi sedang dijeda oleh instruktur. Seluruh akses lab, target eksploitasi, dan pengiriman flag dikunci sementara.',
             'ended'    => 'Sesi kompetisi telah berakhir. Seluruh akses lab, target eksploitasi, dan pengiriman flag telah dinonaktifkan.',
@@ -47,6 +48,7 @@ class ChallengeController extends Controller
             'competitionStatus',
             'selectedCategory',
             'isLocked',
+            'isAdmin',
             'lockMessage'
         ));
     }
