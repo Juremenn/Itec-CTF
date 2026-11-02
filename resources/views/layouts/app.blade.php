@@ -739,6 +739,12 @@
                     </li>
                     @endauth
                     <li>
+                        <a href="{{ route('challenge_requests.index') }}" class="nav-item-link {{ request()->routeIs('challenge_requests.*') ? 'active' : '' }}">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            Request Tantangan
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('scoreboard') }}" class="nav-item-link {{ request()->routeIs('scoreboard*') ? 'active' : '' }}">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                             Papan Skor
@@ -810,6 +816,10 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
             Tantangan
         </a>
+        <a href="{{ route('challenge_requests.index') }}" class="mobile-nav-link {{ request()->routeIs('challenge_requests.*') ? 'active' : '' }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Request Tantangan
+        </a>
         <a href="{{ route('scoreboard') }}" class="mobile-nav-link {{ request()->routeIs('scoreboard*') ? 'active' : '' }}">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             Papan Skor
@@ -829,6 +839,10 @@
             </button>
         </form>
         @else
+        <a href="{{ route('challenge_requests.index') }}" class="mobile-nav-link {{ request()->routeIs('challenge_requests.*') ? 'active' : '' }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Request Tantangan
+        </a>
         <a href="{{ route('scoreboard') }}" class="mobile-nav-link {{ request()->routeIs('scoreboard*') ? 'active' : '' }}">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             Papan Skor

@@ -124,6 +124,11 @@ $include_highlight = $include_highlight ?? false;
                     </div>
                 </div>
 
+                <a href="/request-challenge"
+                   class="cylab-nav-item <?= $page_key === 'request_challenge' ? 'active' : '' ?>">
+                    Request Tantangan
+                </a>
+
                 <a href="/index.php?page=scoreboard"
                    class="cylab-nav-item <?= $page_key === 'scoreboard' ? 'active' : '' ?>">
                     Scoreboard

@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminChallengeController;
+use App\Http\Controllers\AdminChallengeRequestController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChallengeController;
+use App\Http\Controllers\ChallengeRequestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LabController;
 use App\Http\Controllers\ScoreboardController;
@@ -25,6 +27,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Public Scoreboard & Real-time Live Data (Accessible by Participants and Guests)
 Route::get('/scoreboard', [ScoreboardController::class, 'index'])->name('scoreboard');
 Route::get('/scoreboard/live-data', [ScoreboardController::class, 'liveData'])->name('scoreboard.live_data');
+
+// Challenge Request Portal (Direct Form Submission & Reviewer Email Contact)
+Route::get('/request-challenge', [ChallengeRequestController::class, 'index'])->name('challenge_requests.index');
+Route::post('/request-challenge', [ChallengeRequestController::class, 'store'])->name('challenge_requests.store');
+
 
 // Challenge Files Download (Public & Wget Accessible)
 Route::get('/files/{filename}', function ($filename) {
@@ -73,7 +80,11 @@ Route::prefix('itec/admin')->middleware(['stealth.admin'])->group(function () {
         Route::post('/toggle-mode', [AdminController::class, 'toggleMode'])->name('admin.toggle_mode');
         Route::post('/broadcast', [AdminController::class, 'setBroadcast'])->name('admin.broadcast');
         Route::resource('challenges', AdminChallengeController::class)->names('admin.challenges');
+        Route::get('/challenge-requests', [AdminChallengeRequestController::class, 'index'])->name('admin.challenge_requests.index');
+        Route::post('/challenge-requests/{id}/status', [AdminChallengeRequestController::class, 'updateStatus'])->name('admin.challenge_requests.update_status');
+        Route::delete('/challenge-requests/{id}', [AdminChallengeRequestController::class, 'destroy'])->name('admin.challenge_requests.destroy');
         Route::post('/reset-scores', [AdminController::class, 'purgeScores'])->name('admin.reset_scores');
         Route::post('/sync-database', [AdminController::class, 'syncDatabase'])->name('admin.sync_database');
     });
 });
+

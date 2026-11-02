@@ -73,4 +73,10 @@ class User extends Authenticatable
         $id = $challenge instanceof Challenge ? $challenge->id : $challenge;
         return $this->solves()->where('challenge_id', $id)->exists();
     }
+
+    public function challengeRequests(): HasMany
+    {
+        return $this->hasMany(ChallengeRequest::class);
+    }
 }
+

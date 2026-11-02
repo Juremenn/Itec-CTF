@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Challenge;
+use App\Models\ChallengeRequest;
 use App\Models\Solve;
 use App\Models\SystemSetting;
 use App\Models\User;
@@ -83,6 +84,7 @@ class AdminController extends Controller
             ->get();
 
         $challenges = Challenge::orderBy('category')->orderBy('points')->get();
+        $pendingRequestsCount = ChallengeRequest::where('status', 'pending')->count();
 
         return view('admin.index', compact(
             'competitionStatus',
@@ -94,7 +96,8 @@ class AdminController extends Controller
             'competitionSolves',
             'trainingSolves',
             'participants',
-            'challenges'
+            'challenges',
+            'pendingRequestsCount'
         ));
     }
 
