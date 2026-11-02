@@ -198,7 +198,6 @@
             
             <!-- Authentic Tag Label (Bukan Fake Button) -->
             <div class="section-label-tag">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
                 <span>Request Tantangan Baru</span>
             </div>
 
@@ -408,12 +407,13 @@
                     </div>
                 </div>
 
-                <!-- Submit Button -->
-                <div>
+                <!-- Submit Button with Rate Limit Notice -->
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
                     <button type="submit" class="portal-submit-btn">
                         <span>Kirim Request</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </button>
+                    <span style="font-size: 0.775rem; color: #64748b;">Batas: 1 pengajuan per 10 menit (IP & perangkat)</span>
                 </div>
             </form>
 

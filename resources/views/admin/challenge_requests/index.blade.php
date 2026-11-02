@@ -123,6 +123,10 @@
                             @endif
                             <span>&bull;</span>
                             <span style="color: #64748b;">Diajukan {{ $req->created_at->translatedFormat('d M Y, H:i') }}</span>
+                            @if($req->submission_ip)
+                            <span>&bull;</span>
+                            <span style="color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">IP {{ $req->submission_ip }}</span>
+                            @endif
                         </div>
                     </div>
 

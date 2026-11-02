@@ -25,6 +25,8 @@ class ChallengeRequest extends Model
         'original_challenge_filename',
         'reference_url',
         'suggested_flag',
+        'submission_ip',
+        'device_fingerprint',
         'status',
         'admin_notes',
         'reviewed_by',
