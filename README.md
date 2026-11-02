@@ -280,3 +280,10 @@ Platform dilengkapi perintah verifikasi mandiri untuk menguji integritas skema d
 php artisan ctf:verify
 ```
 Perintah ini memvalidasi seluruh fungsionalitas inti tanpa perlu melakukan pengujian manual satu per satu.
+
+---
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah ketentuan **GNU General Public License v3.0 (GPLv3)**. Siapa pun yang menggunakan, memodifikasi, atau mendistribusikan kode ini diwajibkan untuk tetap membuka sumber kodenya secara penuh di bawah lisensi yang sama dan tidak diperkenankan menjadikannya perangkat lunak tertutup (*closed-source*). Rincian lengkap dapat dibaca pada berkas [LICENSE](file:///home/kali/Documents/Itec-001-Practice/LICENSE).
+
