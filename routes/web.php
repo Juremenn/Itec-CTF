@@ -8,6 +8,7 @@ use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\ChallengeRequestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LabController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ScoreboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,9 +47,12 @@ Route::get('/files/{filename}', function ($filename) {
     return response()->download($filePath, $cleanFilename);
 })->name('files.download');
 
+// Public Landing Gateway & Get Started (Before Login)
+Route::get('/', [LandingController::class, 'index'])->name('home');
+Route::get('/get-started', [LandingController::class, 'index'])->name('get_started');
+
 // Authenticated Participant Portal
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges.index');
     Route::get('/challenges/{slug}', [ChallengeController::class, 'show'])->name('challenges.show');

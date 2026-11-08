@@ -23,17 +23,17 @@
 
     <style>
         :root {
-            --bg-base: #090a0f;
-            --surface-card: #11141f;
-            --surface-secondary: #161b29;
-            --surface-elevated: #1c2336;
-            --border-hairline: #1e2538;
-            --border-card-hover: #2d374d;
-            --border-input: #262f47;
+            --bg-base: #0b0c10;
+            --surface-card: rgba(255, 255, 255, 0.02);
+            --surface-secondary: #12141c;
+            --surface-elevated: #161924;
+            --border-hairline: rgba(255, 255, 255, 0.06);
+            --border-card-hover: rgba(255, 255, 255, 0.14);
+            --border-input: rgba(255, 255, 255, 0.10);
             --accent-orange: #f97316;
             --accent-orange-hover: #ea580c;
             --accent-emerald: #10b981;
-            --text-primary: #f8fafc;
+            --text-primary: #ffffff;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
         }
@@ -60,9 +60,8 @@
 
         /* Top Navigation Bar */
         .cylab-navbar {
-            background-color: rgba(12, 13, 18, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-hairline);
+            background-color: #0b0c10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             height: 68px;
             display: flex;
             align-items: center;
@@ -71,6 +70,7 @@
             position: sticky;
             top: 0;
             z-index: 50;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
         }
 
         .nav-brand-group {
@@ -367,13 +367,227 @@
         }
 
         /* Footer */
-        .cylab-footer {
+        /* CyLab Benchmark Multi-Column Footer */
+        .site-footer {
+            background-color: #08090d;
             border-top: 1px solid var(--border-hairline);
-            padding: 1.5rem;
-            text-align: center;
+            margin-top: auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .footer-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 1.75rem 3rem 1.75rem;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+            gap: 2.5rem;
+            box-sizing: border-box;
+        }
+
+        .footer-brand-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.15rem;
+        }
+
+        .footer-brand-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo-img {
+            height: 38px;
+            width: auto;
+            border-radius: 6px;
+            border: 1px solid var(--border-hairline);
+        }
+
+        .footer-brand-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            display: block;
+        }
+
+        .footer-brand-subtitle {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.09em;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .footer-mission {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+            max-width: 320px;
+        }
+
+        .footer-socials {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .footer-social-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-hairline);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+        .footer-social-btn:hover {
+            color: #ffffff;
+            background: var(--surface-elevated);
+            border-color: var(--border-card-hover);
+            transform: translateY(-1px);
+        }
+
+        .footer-support-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.15rem;
+            border-radius: 9999px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-card-hover);
+            color: var(--text-primary);
+            font-size: 0.825rem;
+            font-weight: 600;
+            text-decoration: none;
+            width: fit-content;
+            transition: all 0.15s ease;
+        }
+        .footer-support-btn:hover {
+            background: var(--surface-elevated);
+            border-color: var(--accent-orange);
+            color: #ffffff;
+        }
+
+        .footer-nav-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-col-heading {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            margin: 0 0 1.25rem 0;
+        }
+
+        .footer-link-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            font-size: 0.825rem;
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-affiliate-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .footer-affiliate-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .affiliate-bullet {
+            width: 5px;
+            height: 5px;
+            background-color: #ef4444;
+            border-radius: 1px;
+            flex-shrink: 0;
+        }
+
+        .footer-sub-bar {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(6, 7, 10, 0.6);
+        }
+
+        .footer-sub-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.775rem;
             color: var(--text-muted);
-            font-size: 0.8rem;
-            background: #090a0f;
+            box-sizing: border-box;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+        }
+
+        .footer-legal-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+        .footer-legal-link:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .footer-inner {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-inner {
+                grid-template-columns: 1fr;
+                padding: 3rem 1.25rem 2rem 1.25rem;
+                gap: 2rem;
+            }
+            .footer-sub-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
         }
 
         /* Mobile Responsive Navigation & System */
@@ -408,10 +622,8 @@
             top: 60px;
             left: 0;
             right: 0;
-            background: rgba(12, 13, 18, 0.98);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border-hairline);
+            background: #0b0c10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding: 1rem 1rem 1.5rem 1rem;
             z-index: 49;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
@@ -716,17 +928,26 @@
         <div class="nav-brand-group">
             <a href="{{ route('home') }}" class="nav-logo-link">
                 <img src="{{ asset('assets/img/logoitec.jpg') }}" alt="ITEC Logo" class="nav-logo-img">
-                <span class="nav-brand-title">
-                    ITEC CyberLab
-                </span>
+                <div style="display: flex; flex-direction: column; line-height: 1.15;">
+                    <span style="font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; color: var(--text-primary);">ITEC CyberLab</span>
+                    <span style="font-size: 0.62rem; font-weight: 700; letter-spacing: 0.09em; color: var(--accent-orange); text-transform: uppercase;">SECURITY ACADEMY</span>
+                </div>
             </a>
 
             <!-- Desktop Navigation Links -->
             <nav class="desktop-only">
                 <ul class="nav-links">
+                    @guest
+                    <li>
+                        <a href="{{ route('home') }}" class="nav-item-link {{ request()->routeIs('home', 'get_started') ? 'active' : '' }}">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 12 8"></polygon></svg>
+                            Get Started
+                        </a>
+                    </li>
+                    @endguest
                     @auth
                     <li>
-                        <a href="{{ route('dashboard') }}" class="nav-item-link {{ request()->routeIs('dashboard', 'home') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard') }}" class="nav-item-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                             Dashboard
                         </a>
@@ -782,7 +1003,10 @@
                 </form>
             </div>
             @else
-            <a href="{{ route('login') }}" class="btn-orange">Masuk</a>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <a href="{{ route('login') }}" class="btn-subtle" style="text-decoration: none; padding: 0.45rem 0.95rem; border: 1px solid var(--border-hairline); border-radius: 6px; font-size: 0.85rem; font-weight: 500; color: var(--text-primary);">Log In</a>
+                <a href="{{ route('register') }}" class="btn-orange" style="text-decoration: none; padding: 0.45rem 1.15rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600;">Sign Up</a>
+            </div>
             @endauth
         </div>
 
@@ -839,6 +1063,10 @@
             </button>
         </form>
         @else
+        <a href="{{ route('home') }}" class="mobile-nav-link {{ request()->routeIs('home', 'get_started') ? 'active' : '' }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 12 8"></polygon></svg>
+            Get Started
+        </a>
         <a href="{{ route('challenge_requests.index') }}" class="mobile-nav-link {{ request()->routeIs('challenge_requests.*') ? 'active' : '' }}">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
             Request Tantangan
@@ -847,9 +1075,14 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             Papan Skor
         </a>
-        <a href="{{ route('login') }}" class="btn-orange" style="justify-content: center; padding: 0.65rem 1rem; margin-top: 0.5rem;">
-            Masuk ke Akun
-        </a>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem;">
+            <a href="{{ route('login') }}" class="btn-subtle" style="justify-content: center; padding: 0.65rem 1rem; border: 1px solid var(--border-hairline); border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: var(--text-primary); text-align: center;">
+                Log In
+            </a>
+            <a href="{{ route('register') }}" class="btn-orange" style="justify-content: center; padding: 0.65rem 1rem; border-radius: 9999px; text-decoration: none; font-size: 0.85rem; font-weight: 600; text-align: center;">
+                Sign Up
+            </a>
+        </div>
         @endauth
     </div>
 
@@ -880,10 +1113,104 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="cylab-footer">
-        <div>
-            &copy; {{ date('Y') }} <strong>ITEC Organization</strong> &bull; <a href="https://smkmetland.net" target="_blank" rel="noopener noreferrer" style="color: var(--text-primary); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; transition: color 0.15s ease;" onmouseover="this.style.color='var(--accent-orange)'" onmouseout="this.style.color='var(--text-primary)'">SMK Metland</a> &bull; Platform Edukasi Keamanan Siber & CTF &bull; Didukung oleh Laravel & MySQL
+    <!-- CyLab Benchmark Multi-Column Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <!-- Brand & Mission Column -->
+            <div class="footer-brand-col">
+                <div class="footer-brand-header">
+                    <img src="{{ asset('assets/img/logoitec.jpg') }}" alt="ITEC Logo" class="footer-logo-img">
+                    <div>
+                        <span class="footer-brand-title">ITEC CyberLab</span>
+                        <span class="footer-brand-subtitle">SECURITY ACADEMY</span>
+                    </div>
+                </div>
+                <p class="footer-mission">
+                    Program edukasi dan kompetisi keamanan siber terbuka, dirancang oleh praktisi dan instruktur laboratorium ITEC CyberLab untuk mengasah keahlian pertahanan siber praktis.
+                </p>
+                <div class="footer-socials">
+                    <!-- Discord -->
+                    <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Komunitas Discord">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Instagram Resmi">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Resources Column -->
+            <div class="footer-nav-col">
+                <h4 class="footer-col-heading">Resources</h4>
+                <ul class="footer-link-list">
+                    <li><a href="{{ route('home') }}#pathways" class="footer-link">CTF Primer</a></li>
+                    <li><a href="{{ route('home') }}#pathways" class="footer-link">Learning Guides</a></li>
+                    <li><a href="{{ route('scoreboard') }}" class="footer-link">Live Telemetry</a></li>
+                    <li><a href="https://discord.gg" target="_blank" rel="noopener noreferrer" class="footer-link">Community</a></li>
+                    <li><a href="https://smkmetland.net" target="_blank" rel="noopener noreferrer" class="footer-link">External Resources</a></li>
+                </ul>
+            </div>
+
+            <!-- Learn & More Column -->
+            <div class="footer-nav-col">
+                <h4 class="footer-col-heading">Learn</h4>
+                <ul class="footer-link-list" style="margin-bottom: 1.5rem;">
+                    <li><a href="{{ route('home') }}#pathways" class="footer-link">Challenge Library</a></li>
+                    <li><a href="{{ route('home') }}#pathways" class="footer-link">Learning Paths</a></li>
+                </ul>
+
+                <h4 class="footer-col-heading">More</h4>
+                <ul class="footer-link-list">
+                    <li><a href="{{ route('scoreboard') }}" class="footer-link">Events</a></li>
+                    <li><a href="{{ route('challenge_requests.index') }}" class="footer-link">Classroom</a></li>
+                    <li><a href="{{ route('get_started') }}" class="footer-link">Get Started</a></li>
+                    <li><a href="{{ route('home') }}" class="footer-link">What's New</a></li>
+                    <li><a href="https://smkmetland.net" target="_blank" rel="noopener noreferrer" class="footer-link">About</a></li>
+                </ul>
+            </div>
+
+            <!-- Affiliated With Column -->
+            <div class="footer-nav-col">
+                <h4 class="footer-col-heading">Affiliated With</h4>
+                <ul class="footer-affiliate-list">
+                    <li class="footer-affiliate-item">
+                        <span class="affiliate-bullet"></span>
+                        <a href="https://smkmetland.net" target="_blank" rel="noopener noreferrer" style="color: var(--text-secondary); text-decoration: none;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">SMK Metland Cileungsi</a>
+                    </li>
+                    <li class="footer-affiliate-item">
+                        <span class="affiliate-bullet"></span>
+                        <span>ITEC Organization</span>
+                    </li>
+                    <li class="footer-affiliate-item">
+                        <span class="affiliate-bullet"></span>
+                        <span>CyberLab Security Research</span>
+                    </li>
+                    <li class="footer-affiliate-item">
+                        <span class="affiliate-bullet"></span>
+                        <span>Divisi Cyber Security</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Sub-Footer Legal Bar -->
+        <div class="footer-sub-bar">
+            <div class="footer-sub-inner">
+                <div>
+                    &copy; {{ date('Y') }} <strong>ITEC Organization</strong> &bull; <a href="https://smkmetland.net" target="_blank" rel="noopener noreferrer" style="color: var(--text-muted); text-decoration: underline; text-underline-offset: 2px;">SMK Metland Cileungsi</a> &bull; ITEC CyberLab Security Academy. All rights reserved.
+                </div>
+                <div class="footer-legal-links">
+                    <a href="{{ route('scoreboard') }}" class="footer-legal-link">Privacy Policy</a>
+                    <a href="{{ route('scoreboard') }}" class="footer-legal-link">Terms of Service</a>
+                </div>
+            </div>
         </div>
     </footer>
 

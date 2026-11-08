@@ -10,7 +10,7 @@ if ! mysqladmin ping -u root -S /tmp/mysql.sock --silent 2>/dev/null; then
         echo "[*] Initializing MariaDB data directory in /tmp/mariadb_data..."
         mariadb-install-db --datadir=/tmp/mariadb_data --auth-root-authentication-method=normal >/dev/null 2>&1
     fi
-    mariadbd --datadir=/tmp/mariadb_data --socket=/tmp/mysql.sock --port=3307 --pid-file=/tmp/mariadb.pid >/dev/null 2>&1 &
+    mariadbd --datadir=/tmp/mariadb_data --socket=/tmp/mysql.sock --port=3307 --pid-file=/tmp/mariadb.pid --innodb-buffer-pool-size=16M --key-buffer-size=16M >/dev/null 2>&1 &
     
     # Wait for socket to become ready
     for i in {1..20}; do
