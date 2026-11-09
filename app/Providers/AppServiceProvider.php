@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // The UI is Indonesian; dates and "x menit yang lalu" should match it.
+        \Carbon\Carbon::setLocale('id');
     }
 }
