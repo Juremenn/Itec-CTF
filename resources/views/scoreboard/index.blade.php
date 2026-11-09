@@ -172,7 +172,7 @@
                 @empty
                 <tr id="emptyRow">
                     <td colspan="4" style="padding: 3.5rem 1.5rem; text-align: center; color: #64748b; font-size: 0.85rem;">
-                        Belum ada data skor pada papan ini.
+                        <div class="scoreboard-empty-msg">Belum ada data skor pada papan ini.</div>
                     </td>
                 </tr>
                 @endforelse
@@ -207,6 +207,13 @@
 }
 .ctf-view-btn:hover:not(.active) {
     color: #f8fafc !important;
+}
+/* The table scrolls sideways on phones; pin the empty message to the visible part. */
+.scoreboard-empty-msg {
+    position: sticky;
+    left: 1.5rem;
+    width: calc(100vw - 4.75rem);
+    max-width: 100%;
 }
 </style>
 
@@ -417,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="4" style="padding: 3.5rem 1.5rem; text-align: center; color: #64748b; font-size: 0.85rem;">
-                        Belum ada data skor pada papan ini.
+                        <div class="scoreboard-empty-msg">Belum ada data skor pada papan ini.</div>
                     </td>
                 </tr>`;
             return;

@@ -789,13 +789,15 @@
                 if (el) {
                     var lx = Math.round(n.x + n.labelDx);
                     var ly = Math.round(n.y + n.labelDy);
-                    var transformStr = 'translate3d(' + lx + 'px, ' + ly + 'px, 0)';
+                    var elW = el.offsetWidth;
                     if (n.labelAlign === 'center') {
-                        transformStr += ' translateX(-50%)';
+                        lx -= elW / 2;
                     } else if (n.labelAlign === 'right') {
-                        transformStr += ' translateX(-100%)';
+                        lx -= elW;
                     }
-                    el.style.transform = transformStr;
+                    // Keep edge labels inside the hero on narrow screens.
+                    lx = Math.round(Math.max(8, Math.min(lx, width - elW - 8)));
+                    el.style.transform = 'translate3d(' + lx + 'px, ' + ly + 'px, 0)';
                 }
             }
 

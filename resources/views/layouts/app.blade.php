@@ -578,10 +578,25 @@
         }
 
         @media (max-width: 640px) {
+            /* Two link columns side by side; brand and affiliates take the full row. */
             .footer-inner {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
                 padding: 3rem 1.25rem 2rem 1.25rem;
-                gap: 2rem;
+                gap: 2rem 1.25rem;
+            }
+            .footer-brand-col,
+            .footer-inner > .footer-nav-col:last-child {
+                grid-column: 1 / -1;
+            }
+            .footer-link-list {
+                gap: 0.15rem;
+            }
+            .footer-link {
+                display: inline-block;
+                padding: 0.4rem 0;
+            }
+            .footer-col-heading {
+                margin-bottom: 0.65rem;
             }
             .footer-sub-inner {
                 flex-direction: column;
@@ -831,6 +846,8 @@
                 padding: 1.25rem 1rem;
                 font-size: 0.75rem;
             }
+        }
+
         .target-stream-row:hover {
             background-color: var(--surface-secondary) !important;
         }
@@ -894,6 +911,20 @@
                 flex-shrink: 0;
                 font-size: 0.75rem;
                 padding: 0.35rem 0.65rem;
+            }
+        }
+
+        /* Bigger touch area for small text buttons, same look. */
+        @media (pointer: coarse) {
+            .clear-filters-btn,
+            #copyEmailBtn {
+                position: relative;
+            }
+            .clear-filters-btn::after,
+            #copyEmailBtn::after {
+                content: '';
+                position: absolute;
+                inset: -10px -6px;
             }
         }
 
